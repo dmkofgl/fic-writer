@@ -9,7 +9,7 @@ import java.util.UUID;
 @Entity
 public class ActorState {
     @Id
-    private UUID uuid;
+    private Long id;
     @OneToOne
     private Article article;
     @ManyToOne

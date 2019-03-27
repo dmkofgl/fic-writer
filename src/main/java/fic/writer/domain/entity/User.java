@@ -8,7 +8,7 @@ import java.util.UUID;
 public class User {
     @Id
     @GeneratedValue
-    private UUID id;
+    private Long id;
     private String username;
     private String about;
     private String information;

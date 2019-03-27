@@ -10,7 +10,7 @@ import java.util.UUID;
 @Entity
 public class Article {
     @Id
-    private UUID id;
+    private Long id;
     private String title;
     private Date created;
     private String content;

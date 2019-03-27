@@ -7,6 +7,6 @@ import java.util.UUID;
 @Entity
 public class Genre {
     @Id
-    private UUID id;
+    private Long id;
     private String name;
 }

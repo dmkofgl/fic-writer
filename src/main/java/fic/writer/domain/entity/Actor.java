@@ -9,7 +9,7 @@ import java.util.UUID;
 @Entity
 public class Actor {
     @Id
-    private UUID uuid;
+    private Long id;
     private String name;
     private String description;
     @ManyToMany

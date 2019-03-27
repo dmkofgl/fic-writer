@@ -12,7 +12,7 @@ import java.util.UUID;
 @Entity
 public class Book {
     @Id
-    private UUID id;
+    private long id;
     private String title;
     @ManyToOne
     private User author;
