@@ -1,14 +1,15 @@
 package fic.writer.domain.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import lombok.Data;
+
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
+@Data
 public class ActorState {
     @Id
+    @GeneratedValue
     private Long id;
     @OneToOne
     private Article article;
