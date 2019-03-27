@@ -14,4 +14,6 @@ public interface BookService {
     Page<Book> findPage(Pageable pageable);
 
     Optional<Book> findById(UUID uuid);
+
+    Book save(Book book);
 }
