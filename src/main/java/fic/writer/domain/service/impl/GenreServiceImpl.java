@@ -38,4 +38,14 @@ public class GenreServiceImpl implements GenreService {
     public Genre save(Genre genre) {
         return genreRepository.save(genre);
     }
+
+    @Override
+    public void delete(Genre genre) {
+        genreRepository.delete(genre);
+    }
+
+    @Override
+    public void deleteById(UUID uuid) {
+        genreRepository.deleteById(uuid);
+    }
 }
