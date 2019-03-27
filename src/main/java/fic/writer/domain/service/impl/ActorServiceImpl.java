@@ -21,7 +21,6 @@ public class ActorServiceImpl implements ActorService {
         this.actorRepositry = actorRepositry;
     }
 
-
     @Override
     public List<Actor> findAll() {
         return actorRepositry.findAll();
@@ -34,7 +33,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Optional<Actor> findById(UUID uuid) {
-        return findById(uuid);
+        return actorRepositry.findById(uuid);
     }
 
     @Override
