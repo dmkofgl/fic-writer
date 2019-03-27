@@ -11,5 +11,5 @@ import java.util.UUID;
 public interface ActorStateRepository extends JpaRepository<ActorState, UUID> {
     Page<ActorState> findAllByActorId(UUID actorId, Pageable pageable);
 
-    Optional<ActorState> findAByActorIdAndArticleId(UUID actorId, UUID articleId, Pageable pageable);
+    Optional<ActorState> findAByActorIdAndArticleId(UUID actorId, UUID articleId);
 }
