@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 public class Book {
     @Id
+    @GeneratedValue
     private long id;
     private String title;
     @ManyToOne
