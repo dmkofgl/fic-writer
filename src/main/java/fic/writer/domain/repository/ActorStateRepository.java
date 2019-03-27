@@ -6,10 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
-import java.util.UUID;
 
-public interface ActorStateRepository extends JpaRepository<ActorState, UUID> {
-    Page<ActorState> findAllByActorId(UUID actorId, Pageable pageable);
+public interface ActorStateRepository extends JpaRepository<ActorState, Long> {
+    Page<ActorState> findAllByActorId(Long actorId, Pageable pageable);
 
-    Optional<ActorState> findAByActorIdAndArticleId(UUID actorId, UUID articleId);
+    Optional<ActorState> findAByActorIdAndArticleId(Long actorId, Long articleId);
 }
