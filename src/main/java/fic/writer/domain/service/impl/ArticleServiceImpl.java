@@ -31,8 +31,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Optional<Article> findById(UUID uuid) {
-        return articleRepository.findById(uuid);
+    public Optional<Article> findById(Long id) {
+        return articleRepository.findById(id);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void deleteById(UUID uuid) {
-        articleRepository.deleteById(uuid);
+    public void deleteById(Long id) {
+        articleRepository.deleteById(id);
     }
 }

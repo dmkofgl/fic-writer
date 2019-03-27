@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface ActorStateService extends CrudService<ActorState, UUID> {
+public interface ActorStateService extends CrudService<ActorState, Long> {
 
-    Page<ActorState> findAllByActor(UUID uuid, Pageable pageable);
+    Page<ActorState> findAllByActor(Long id, Pageable pageable);
 
-    Optional<ActorState> findForActorByArticle(UUID actorId, UUID articleId);
+    Optional<ActorState> findForActorByArticle(Long actorId, Long articleId);
 }

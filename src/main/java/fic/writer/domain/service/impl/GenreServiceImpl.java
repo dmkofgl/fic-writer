@@ -31,8 +31,8 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Optional<Genre> findById(UUID uuid) {
-        return genreRepository.findById(uuid);
+    public Optional<Genre> findById(Long id) {
+        return genreRepository.findById(id);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public void deleteById(UUID uuid) {
-        genreRepository.deleteById(uuid);
+    public void deleteById(Long id) {
+        genreRepository.deleteById(id);
     }
 }
