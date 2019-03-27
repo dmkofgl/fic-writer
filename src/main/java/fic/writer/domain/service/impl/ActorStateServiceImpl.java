@@ -60,4 +60,14 @@ public class ActorStateServiceImpl implements ActorStateService {
     public Optional<ActorState> findForActorByArticle(Long actorId, Long articleId) {
         return actorStateRepository.findAByActorIdAndArticleId(actorId, articleId);
     }
+
+    @Override
+    public Page<ActorState> findAllByActor(UUID uuid, Pageable pageable) {
+        return actorStateRepository.findAllByActorId(uuid, pageable);
+    }
+
+    @Override
+    public Optional<ActorState> findForActorByArticle(UUID actorId, UUID articleId) {
+        return actorStateRepository.findAByActorIdAndArticleId(actorId,articleId);
+    }
 }
