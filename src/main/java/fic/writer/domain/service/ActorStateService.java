@@ -14,4 +14,6 @@ public interface ActorStateService {
     Page<ActorState> findPage(Pageable pageable);
 
     Optional<ActorState> findById(UUID uuid);
+
+    ActorState save(ActorState actorState);
 }

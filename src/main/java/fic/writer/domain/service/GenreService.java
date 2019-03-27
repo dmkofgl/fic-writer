@@ -14,4 +14,7 @@ public interface GenreService {
     Page<Genre> findPage(Pageable pageable);
 
     Optional<Genre> findById(UUID uuid);
+
+    Genre save(Genre genre);
+
 }

@@ -19,7 +19,6 @@ public class GenreServiceImpl implements GenreService {
         this.genreRepository = genreRepository;
     }
 
-
     @Override
     public List<Genre> findAll() {
         return genreRepository.findAll();
@@ -33,5 +32,10 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public Optional<Genre> findById(UUID uuid) {
         return genreRepository.findById(uuid);
+    }
+
+    @Override
+    public Genre save(Genre genre) {
+        return genreRepository.save(genre);
     }
 }
