@@ -24,6 +24,7 @@ public class ActorStateServiceImpl implements ActorStateService {
         return actorStateRepository.findAll();
     }
 
+
     @Override
     public Page<ActorState> findPage(Pageable pageable) {
         return actorStateRepository.findAll(pageable);
@@ -47,5 +48,15 @@ public class ActorStateServiceImpl implements ActorStateService {
     @Override
     public void deleteById(UUID uuid) {
         actorStateRepository.deleteById(uuid);
+    }
+
+    @Override
+    public Page<ActorState> findAllByActor(UUID uuid, Pageable pageable) {
+        return actorStateRepository.findAllByActorId(uuid, pageable);
+    }
+
+    @Override
+    public Optional<ActorState> findForActorByArticle(UUID actorId, UUID articleId) {
+        return actorStateRepository.findAByActorIdAndArticleId(actorId,articleId);
     }
 }
