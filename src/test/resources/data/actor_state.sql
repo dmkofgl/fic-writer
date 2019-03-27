@@ -1,0 +1,1 @@
+INSERT INTO `ficwriter-test`.actor_state(`id`,content,`title`,`actor_id`,`article_id`)VALUES(1,'content1','title1',1,1);
