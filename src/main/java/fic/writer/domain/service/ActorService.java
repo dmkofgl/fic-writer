@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ActorService {
@@ -12,6 +13,6 @@ public interface ActorService {
 
     Page<Actor> findPage(Pageable pageable);
 
-    Actor findById(UUID uuid);
+    Optional<Actor> findById(UUID uuid);
 
 }
