@@ -32,8 +32,8 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public Optional<Actor> findById(UUID uuid) {
-        return actorRepositry.findById(uuid);
+    public Optional<Actor> findById(Long id) {
+        return actorRepositry.findById(id);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void deleteById(UUID uuid) {
-        actorRepositry.deleteById(uuid);
+    public void deleteById(Long id) {
+        actorRepositry.deleteById(id);
     }
 }

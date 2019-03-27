@@ -4,6 +4,6 @@ import fic.writer.domain.entity.User;
 
 import java.util.UUID;
 
-public interface UserService extends CrudService<User, UUID> {
+public interface UserService extends CrudService<User, Long> {
 
 }

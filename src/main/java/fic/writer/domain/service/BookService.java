@@ -4,5 +4,5 @@ import fic.writer.domain.entity.Book;
 
 import java.util.UUID;
 
-public interface BookService extends CrudService<Book, UUID> {
+public interface BookService extends CrudService<Book, Long> {
 }
