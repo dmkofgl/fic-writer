@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 @Service
 public class ActorStateServiceImpl implements ActorStateService {
     private ActorStateRepository actorStateRepository;
@@ -32,8 +32,8 @@ public class ActorStateServiceImpl implements ActorStateService {
     }
 
     @Override
-    public Optional<ActorState> findById(UUID uuid) {
-        return actorStateRepository.findById(uuid);
+    public Optional<ActorState> findById(Long id) {
+        return actorStateRepository.findById(id);
     }
 
     @Override
@@ -47,17 +47,17 @@ public class ActorStateServiceImpl implements ActorStateService {
     }
 
     @Override
-    public void deleteById(UUID uuid) {
-        actorStateRepository.deleteById(uuid);
+    public void deleteById(Long id) {
+        actorStateRepository.deleteById(id);
     }
 
     @Override
-    public Page<ActorState> findAllByActor(UUID uuid, Pageable pageable) {
-        return actorStateRepository.findAllByActorId(uuid, pageable);
+    public Page<ActorState> findAllByActor(Long id, Pageable pageable) {
+        return actorStateRepository.findAllByActorId(id, pageable);
     }
 
     @Override
-    public Optional<ActorState> findForActorByArticle(UUID actorId, UUID articleId) {
-        return actorStateRepository.findAByActorIdAndArticleId(actorId,articleId);
+    public Optional<ActorState> findForActorByArticle(Long actorId, Long articleId) {
+        return actorStateRepository.findAByActorIdAndArticleId(actorId, articleId);
     }
 }
