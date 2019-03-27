@@ -15,4 +15,6 @@ public interface ActorService {
 
     Optional<Actor> findById(UUID uuid);
 
+    Actor save(Actor actor);
+
 }

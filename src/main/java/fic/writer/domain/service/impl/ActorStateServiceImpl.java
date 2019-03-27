@@ -12,25 +12,30 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class ActorStateServiceImpl implements ActorStateService {
-    private ActorStateRepository actorRepository;
+    private ActorStateRepository actorStateRepository;
 
     @Autowired
-    public ActorStateServiceImpl(ActorStateRepository actorRepository) {
-        this.actorRepository = actorRepository;
+    public ActorStateServiceImpl(ActorStateRepository actorStateRepository) {
+        this.actorStateRepository = actorStateRepository;
     }
 
     @Override
     public List<ActorState> findAll() {
-        return actorRepository.findAll();
+        return actorStateRepository.findAll();
     }
 
     @Override
     public Page<ActorState> findPage(Pageable pageable) {
-        return actorRepository.findAll(pageable);
+        return actorStateRepository.findAll(pageable);
     }
 
     @Override
     public Optional<ActorState> findById(UUID uuid) {
-        return actorRepository.findById(uuid);
+        return actorStateRepository.findById(uuid);
+    }
+
+    @Override
+    public ActorState save(ActorState actorState) {
+        return actorStateRepository.save(actorState);
     }
 }

@@ -19,7 +19,6 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
-
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
@@ -33,5 +32,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findById(UUID uuid) {
         return userRepository.findById(uuid);
+    }
+
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
     }
 }

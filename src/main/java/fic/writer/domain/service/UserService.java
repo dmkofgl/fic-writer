@@ -14,4 +14,7 @@ public interface UserService {
     Page<User> findPage(Pageable pageable);
 
     Optional<User> findById(UUID uuid);
+
+    User save(User user);
+
 }

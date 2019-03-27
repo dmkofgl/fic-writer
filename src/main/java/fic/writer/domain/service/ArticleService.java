@@ -14,4 +14,6 @@ public interface ArticleService {
     Page<Article> findPage(Pageable pageable);
 
     Optional<Article> findById(UUID uuid);
+
+    Article save(Article article);
 }

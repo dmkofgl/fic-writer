@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,7 +33,12 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public Actor findById(UUID uuid) {
+    public Optional<Actor> findById(UUID uuid) {
         return findById(uuid);
+    }
+
+    @Override
+    public Actor save(Actor actor) {
+        return actorRepositry.save(actor);
     }
 }

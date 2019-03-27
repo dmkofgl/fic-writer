@@ -33,4 +33,9 @@ public class ArticleServiceImpl implements ArticleService {
     public Optional<Article> findById(UUID uuid) {
         return articleRepository.findById(uuid);
     }
+
+    @Override
+    public Article save(Article article) {
+        return articleRepository.save(article);
+    }
 }
