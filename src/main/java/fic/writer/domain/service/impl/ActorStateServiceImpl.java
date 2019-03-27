@@ -77,4 +77,14 @@ public class ActorStateServiceImpl implements ActorStateService {
                 .content(actorState.getContent())
                 .build();
     }
+
+    @Override
+    public Page<ActorState> findAllByActor(UUID uuid, Pageable pageable) {
+        return actorStateRepository.findAllByActorId(uuid, pageable);
+    }
+
+    @Override
+    public Optional<ActorState> findForActorByArticle(UUID actorId, UUID articleId) {
+        return actorStateRepository.findAByActorIdAndArticleId(actorId,articleId);
+    }
 }
