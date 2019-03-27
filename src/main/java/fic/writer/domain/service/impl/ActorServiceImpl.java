@@ -41,4 +41,14 @@ public class ActorServiceImpl implements ActorService {
     public Actor save(Actor actor) {
         return actorRepositry.save(actor);
     }
+
+    @Override
+    public void delete(Actor actor) {
+        actorRepositry.delete(actor);
+    }
+
+    @Override
+    public void deleteById(UUID uuid) {
+        actorRepositry.deleteById(uuid);
+    }
 }

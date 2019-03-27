@@ -38,4 +38,14 @@ public class ActorStateServiceImpl implements ActorStateService {
     public ActorState save(ActorState actorState) {
         return actorStateRepository.save(actorState);
     }
+
+    @Override
+    public void delete(ActorState actorState) {
+        actorStateRepository.delete(actorState);
+    }
+
+    @Override
+    public void deleteById(UUID uuid) {
+        actorStateRepository.deleteById(uuid);
+    }
 }
