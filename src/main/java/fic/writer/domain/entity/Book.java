@@ -15,6 +15,7 @@ import java.util.Set;
 @Builder
 public class Book {
     @Id
+    @GeneratedValue
     private long id;
     private String title;
     @ManyToOne
