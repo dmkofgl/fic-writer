@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface GenreService {
@@ -12,5 +13,5 @@ public interface GenreService {
 
     Page<Genre> findPage(Pageable pageable);
 
-    Genre findById(UUID uuid);
+    Optional<Genre> findById(UUID uuid);
 }
