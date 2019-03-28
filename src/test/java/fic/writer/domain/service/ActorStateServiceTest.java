@@ -1,7 +1,6 @@
 package fic.writer.domain.service;
 
 import fic.writer.domain.entity.ActorState;
-import fic.writer.domain.entity.Article;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +16,11 @@ public class ActorStateServiceTest {
     ActorStateService actorStateService;
 
     @Test
-    public void createActorState_whenCorrect_shouldReturnGeneratedUUID() {
-        ActorState actorState = new ActorState();
+    public void createActorState_whenCorrect_shouldReturnGeneratedId() {
+        ActorState actorState = ActorState.builder().build();
         actorStateService.save(actorState);
         assertNotNull(actorState.getId());
     }
 
-    @Test
-    public void findActorStateByArticle_whenCorrect_shouldFind() {
-        ActorState actorState = new ActorState();
-        Article article = new Article();
-
-        actorState.setArticle(article);
-        actorStateService.save(actorState);
-        assertNotNull(actorState.getId());
-    }
 
 }
