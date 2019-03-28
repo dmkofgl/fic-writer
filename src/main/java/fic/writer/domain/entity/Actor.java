@@ -1,18 +1,21 @@
 package fic.writer.domain.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import lombok.Builder;
+import lombok.Data;
+
+import javax.persistence.*;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
+@Data
+@Builder
 public class Actor {
     @Id
+    @GeneratedValue
     private Long id;
     private String name;
     private String description;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "actors")
     private List<Book> books;
 
 }

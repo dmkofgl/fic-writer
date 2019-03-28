@@ -6,7 +6,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Entity
@@ -27,10 +26,18 @@ public class Book {
     private String description;
     private Size size;
     private State state;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     private List<Article> articles;
-    @ManyToOne
-    private Genre genre;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "book_genres",
+            joinColumns = {@JoinColumn(name = "book_id")},
+            inverseJoinColumns = {@JoinColumn(name = "genre_id")}
+    )
+    private List<Genre> genres;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "book_actors",
+            joinColumns = {@JoinColumn(name = "book_id")},
+            inverseJoinColumns = {@JoinColumn(name = "actor_id")}
+    )
     private List<Actor> actors;
 }

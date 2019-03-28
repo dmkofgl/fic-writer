@@ -1,15 +1,20 @@
 package fic.writer.domain.entity;
 
+import lombok.Builder;
+import lombok.Data;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import java.util.Date;
-import java.util.UUID;
 
 @Entity
+@Data
+@Builder
 public class Article {
     @Id
+    @GeneratedValue
     private Long id;
     private String title;
     private Date created;
