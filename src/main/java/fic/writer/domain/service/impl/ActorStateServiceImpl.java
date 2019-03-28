@@ -1,6 +1,7 @@
 package fic.writer.domain.service.impl;
 
 import fic.writer.domain.entity.ActorState;
+import fic.writer.domain.entity.dto.ActorStateDto;
 import fic.writer.domain.repository.ActorStateRepository;
 import fic.writer.domain.service.ActorStateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +60,21 @@ public class ActorStateServiceImpl implements ActorStateService {
     @Override
     public Optional<ActorState> findForActorByArticle(Long actorId, Long articleId) {
         return actorStateRepository.findAByActorIdAndArticleId(actorId, articleId);
+    }
+
+    @Override
+    public ActorState save(ActorStateDto actorStateDto) {
+        ActorState state = actorStateDtoForActorState(actorStateDto);
+        return save(state);
+    }
+
+    private ActorState actorStateDtoForActorState(ActorStateDto actorState) {
+        return ActorState.builder()
+                .id(actorState.getId())
+                .article(actorState.getArticle())
+                .actor(actorState.getActor())
+                .title(actorState.getTitle())
+                .content(actorState.getContent())
+                .build();
     }
 }
