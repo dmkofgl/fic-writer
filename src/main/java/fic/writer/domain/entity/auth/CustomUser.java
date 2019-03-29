@@ -1,18 +1,23 @@
 package fic.writer.domain.entity.auth;
 
 import fic.writer.domain.entity.User;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CustomUser {
     @Id
     @GeneratedValue
-    private UUID uuid;
+    private Long id;
     @OneToOne
     private User profile;
     private String email;

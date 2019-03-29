@@ -1,9 +1,16 @@
 package fic.writer.domain.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue

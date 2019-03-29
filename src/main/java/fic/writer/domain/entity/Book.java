@@ -2,13 +2,17 @@ package fic.writer.domain.entity;
 
 import fic.writer.domain.entity.enums.Size;
 import fic.writer.domain.entity.enums.State;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Book {
     @Id
     private long id;
@@ -24,9 +28,11 @@ public class Book {
     @OneToMany
     private List<Book> source;
     private String description;
+    @Enumerated
     private Size size;
+    @Enumerated
     private State state;
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Article> articles;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "book_genres",

@@ -15,4 +15,6 @@ logging:
   level:
     org:
       springframework: INFO
+server:
+  port: 8081
 
