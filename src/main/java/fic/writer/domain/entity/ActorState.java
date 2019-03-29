@@ -14,9 +14,9 @@ public class ActorState {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Article article;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Actor actor;
     private String title;
     private String content;

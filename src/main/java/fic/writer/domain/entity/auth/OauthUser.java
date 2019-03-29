@@ -3,10 +3,7 @@ package fic.writer.domain.entity.auth;
 import fic.writer.domain.entity.User;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -19,7 +16,7 @@ public class OauthUser {
     @Id
     @GeneratedValue
     private Long id;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private User profile;
     private String token;
     private Date expireDate;

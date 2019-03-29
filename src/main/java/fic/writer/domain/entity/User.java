@@ -18,10 +18,10 @@ public class User {
     private String username;
     private String about;
     private String information;
-    @ManyToMany(mappedBy = "subAuthors")
-    private List<Book> books;
-    @OneToMany
-    private List<Book> writedBook;
+    @ManyToMany(mappedBy = "subAuthors", fetch = FetchType.LAZY)
+    private List<Book> booksAsSubAuthor;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Book> booksAsAuthor;
 
 
 }

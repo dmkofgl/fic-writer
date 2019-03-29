@@ -25,14 +25,14 @@ public class Book {
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     private List<User> subAuthors;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Book> source;
     private String description;
     @Enumerated
     private Size size;
     @Enumerated
     private State state;
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Article> articles;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "book_genres",
