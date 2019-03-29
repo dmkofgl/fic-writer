@@ -1,6 +1,7 @@
 package fic.writer.domain.service.impl;
 
 import fic.writer.domain.entity.ActorState;
+import fic.writer.domain.entity.ActorStateId;
 import fic.writer.domain.entity.dto.ActorStateDto;
 import fic.writer.domain.repository.ActorStateRepository;
 import fic.writer.domain.service.ActorStateService;
@@ -33,7 +34,7 @@ public class ActorStateServiceImpl implements ActorStateService {
     }
 
     @Override
-    public Optional<ActorState> findById(Long id) {
+    public Optional<ActorState> findById(ActorStateId id) {
         return actorStateRepository.findById(id);
     }
 
@@ -48,18 +49,18 @@ public class ActorStateServiceImpl implements ActorStateService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(ActorStateId id) {
         actorStateRepository.deleteById(id);
     }
 
     @Override
     public Page<ActorState> findAllByActor(Long id, Pageable pageable) {
-        return actorStateRepository.findAllByActorId(id, pageable);
+        return actorStateRepository.findAllByIdActorId(id, pageable);
     }
 
     @Override
     public Optional<ActorState> findForActorByArticle(Long actorId, Long articleId) {
-        return actorStateRepository.findAByActorIdAndArticleId(actorId, articleId);
+        return actorStateRepository.findAByIdActorIdAndIdArticleId(actorId, articleId);
     }
 
     @Override
@@ -71,20 +72,8 @@ public class ActorStateServiceImpl implements ActorStateService {
     private ActorState actorStateDtoForActorState(ActorStateDto actorState) {
         return ActorState.builder()
                 .id(actorState.getId())
-                .article(actorState.getArticle())
-                .actor(actorState.getActor())
                 .title(actorState.getTitle())
                 .content(actorState.getContent())
                 .build();
-    }
-
-    @Override
-    public Page<ActorState> findAllByActor(UUID uuid, Pageable pageable) {
-        return actorStateRepository.findAllByActorId(uuid, pageable);
-    }
-
-    @Override
-    public Optional<ActorState> findForActorByArticle(UUID actorId, UUID articleId) {
-        return actorStateRepository.findAByActorIdAndArticleId(actorId,articleId);
     }
 }

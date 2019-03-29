@@ -2,7 +2,9 @@ package fic.writer.domain.entity;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.IdClass;
 
 @Entity
 @Getter
@@ -11,14 +13,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 public class ActorState {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @OneToOne(fetch = FetchType.LAZY)
-    private Article article;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Actor actor;
+    @EmbeddedId
+    private ActorStateId id;
     private String title;
     private String content;
-
 }

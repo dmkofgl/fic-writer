@@ -1,17 +1,14 @@
 package fic.writer.domain.entity.dto;
 
-import fic.writer.domain.entity.Actor;
 import fic.writer.domain.entity.ActorState;
-import fic.writer.domain.entity.Article;
+import fic.writer.domain.entity.ActorStateId;
 import lombok.Builder;
 import lombok.Data;
 
 @Builder
 @Data
 public class ActorStateDto {
-    private Long id;
-    private Article article;
-    private Actor actor;
+    private ActorStateId id;
     private String title;
     private String content;
 
@@ -19,8 +16,6 @@ public class ActorStateDto {
     public static ActorStateDto of(ActorState actorState) {
         return builder()
                 .id(actorState.getId())
-                .article(actorState.getArticle())
-                .actor(actorState.getActor())
                 .title(actorState.getTitle())
                 .content(actorState.getContent())
                 .build();
