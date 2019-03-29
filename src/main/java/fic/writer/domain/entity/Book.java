@@ -5,7 +5,7 @@ import fic.writer.domain.entity.enums.State;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -24,26 +24,26 @@ public class Book {
             joinColumns = {@JoinColumn(name = "book_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
-    private List<User> subAuthors;
+    private Set<User> subAuthors;
     @OneToMany(fetch = FetchType.EAGER)
-    private List<Book> source;
+    private Set<Book> source;
     private String description;
     @Enumerated
     private Size size;
     @Enumerated
     private State state;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Article> articles;
+    private Set<Article> articles;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "book_genres",
             joinColumns = {@JoinColumn(name = "book_id")},
             inverseJoinColumns = {@JoinColumn(name = "genre_id")}
     )
-    private List<Genre> genres;
+    private Set<Genre> genres;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "book_actors",
             joinColumns = {@JoinColumn(name = "book_id")},
             inverseJoinColumns = {@JoinColumn(name = "actor_id")}
     )
-    private List<Actor> actors;
+    private Set<Actor> actors;
 }

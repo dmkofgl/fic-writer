@@ -7,6 +7,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -19,5 +20,5 @@ public class Genre {
     private Long id;
     private String name;
     @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY)
-    private List<Book> book;
+    private Set<Book> book;
 }

@@ -3,7 +3,7 @@ package fic.writer.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,8 +18,8 @@ public class Actor {
     private String name;
     private String description;
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "actors")
-    private List<Book> books;
+    private Set<Book> books;
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<ActorState> actorStates;
+    private Set<ActorState> actorStates;
 
 }
