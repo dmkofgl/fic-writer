@@ -17,16 +17,13 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ActorArticleActorStateTest {
+    @Autowired
     ActorStateService actorStateService;
+    @Autowired
     ArticleService articleService;
+    @Autowired
     ActorService actorService;
 
-    @Autowired
-    public ActorArticleActorStateTest(ActorStateService actorStateService, ArticleService articleService, ActorService actorService) {
-        this.actorStateService = actorStateService;
-        this.articleService = articleService;
-        this.actorService = actorService;
-    }
 
     @Test
     public void findActorStateByArticle_whenCorrect_shouldExist() {

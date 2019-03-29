@@ -1,7 +1,7 @@
 
 spring:
   profiles:
-    active: db-h2
+    active: db-mysql
 logging:
   level:
     org:

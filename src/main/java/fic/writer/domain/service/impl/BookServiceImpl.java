@@ -1,7 +1,6 @@
 package fic.writer.domain.service.impl;
 
 import fic.writer.domain.entity.Book;
-import fic.writer.domain.entity.dto.BookSearchDto;
 import fic.writer.domain.repository.BookRepository;
 import fic.writer.domain.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 @Service
 public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
