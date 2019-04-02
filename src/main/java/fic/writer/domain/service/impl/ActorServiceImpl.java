@@ -1,6 +1,7 @@
 package fic.writer.domain.service.impl;
 
 import fic.writer.domain.entity.Actor;
+import fic.writer.domain.entity.dto.ActorDto;
 import fic.writer.domain.repository.ActorRepositry;
 import fic.writer.domain.service.ActorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,17 +38,38 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public Actor save(Actor actor) {
+    public Actor update(Long id, ActorDto actorDto) {
+        Actor actor = actorRepositry.findById(id).orElseThrow(EntityNotFoundException::new);
+        flushArticleDtoToArticle(actor, actorDto);
         return actorRepositry.save(actor);
     }
 
+    private void flushArticleDtoToArticle(Actor actor, ActorDto actorDto) {
+        if (actorDto.getName() != null) {
+            actor.setName(actorDto.getName());
+        }
+        if (actorDto.getActorStates() != null) {
+            actor.setActorStates(actorDto.getActorStates());
+        }
+        if (actorDto.getDescription() != null) {
+            actor.setDescription(actorDto.getDescription());
+        }
+    }
+
     @Override
-    public void delete(Actor actor) {
-        actorRepositry.delete(actor);
+    public Actor getOne(Long id) {
+        return actorRepositry.getOne(id);
     }
 
     @Override
     public void deleteById(Long id) {
         actorRepositry.deleteById(id);
+    }
+
+    @Override
+    public Actor create(ActorDto actorDto) {
+        Actor actor = Actor.builder().build();
+        flushArticleDtoToArticle(actor, actorDto);
+        return actorRepositry.save(actor);
     }
 }

@@ -1,6 +1,23 @@
 package fic.writer.domain.service;
 
 import fic.writer.domain.entity.Article;
+import fic.writer.domain.entity.dto.ArticleDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-public interface ArticleService extends CrudService<Article, Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface ArticleService {
+    List<Article> findAll();
+
+    Page<Article> findPage(Pageable pageable);
+
+    Article update(Long id, ArticleDto articleDto);
+
+    Optional<Article> findById(Long aLong);
+
+    void delete(Article article);
+
+    void deleteById(Long aLong);
 }

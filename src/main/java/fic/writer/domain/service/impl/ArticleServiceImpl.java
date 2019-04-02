@@ -1,6 +1,7 @@
 package fic.writer.domain.service.impl;
 
 import fic.writer.domain.entity.Article;
+import fic.writer.domain.entity.dto.ArticleDto;
 import fic.writer.domain.repository.ArticleRepository;
 import fic.writer.domain.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,13 +33,27 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Optional<Article> findById(Long id) {
-        return articleRepository.findById(id);
+    public Article update(Long id, ArticleDto articleDto) {
+        Article article = articleRepository.findById(id).orElseThrow(EntityExistsException::new);
+        flushArticleDtoToArticle(article, articleDto);
+        return articleRepository.save(article);
+    }
+
+    private void flushArticleDtoToArticle(Article article, ArticleDto articleDto) {
+        if (articleDto.getTitle() != null) {
+            article.setTitle(articleDto.getTitle());
+        }
+        if (articleDto.getAnnotation() != null) {
+            article.setAnnotation(articleDto.getAnnotation());
+        }
+        if (articleDto.getContent() != null) {
+            article.setContent(articleDto.getContent());
+        }
     }
 
     @Override
-    public Article save(Article article) {
-        return articleRepository.save(article);
+    public Optional<Article> findById(Long id) {
+        return articleRepository.findById(id);
     }
 
     @Override

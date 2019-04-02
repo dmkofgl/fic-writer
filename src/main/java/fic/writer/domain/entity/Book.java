@@ -15,8 +15,8 @@ import java.util.Set;
 @Builder
 public class Book {
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String title;
     @ManyToOne
     private User author;

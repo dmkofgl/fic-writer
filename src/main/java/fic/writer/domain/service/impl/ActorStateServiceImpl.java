@@ -3,6 +3,7 @@ package fic.writer.domain.service.impl;
 import fic.writer.domain.entity.ActorState;
 import fic.writer.domain.entity.ActorStateId;
 import fic.writer.domain.entity.dto.ActorStateDto;
+import fic.writer.domain.repository.ActorRepositry;
 import fic.writer.domain.repository.ActorStateRepository;
 import fic.writer.domain.service.ActorStateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @Service
 public class ActorStateServiceImpl implements ActorStateService {
     private ActorStateRepository actorStateRepository;
+    private ActorRepositry actorRepository;
 
     @Autowired
     public ActorStateServiceImpl(ActorStateRepository actorStateRepository) {
@@ -39,11 +41,6 @@ public class ActorStateServiceImpl implements ActorStateService {
     }
 
     @Override
-    public ActorState save(ActorState actorState) {
-        return actorStateRepository.save(actorState);
-    }
-
-    @Override
     public void delete(ActorState actorState) {
         actorStateRepository.delete(actorState);
     }
@@ -61,12 +58,6 @@ public class ActorStateServiceImpl implements ActorStateService {
     @Override
     public Optional<ActorState> findForActorByArticle(Long actorId, Long articleId) {
         return actorStateRepository.findAByIdActorIdAndIdArticleId(actorId, articleId);
-    }
-
-    @Override
-    public ActorState save(ActorStateDto actorStateDto) {
-        ActorState state = actorStateDtoForActorState(actorStateDto);
-        return save(state);
     }
 
     private ActorState actorStateDtoForActorState(ActorStateDto actorState) {

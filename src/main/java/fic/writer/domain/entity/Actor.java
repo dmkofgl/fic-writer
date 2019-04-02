@@ -13,13 +13,23 @@ import java.util.Set;
 @Builder
 public class Actor {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
     private Long id;
     private String name;
     private String description;
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "actors")
     private Set<Book> books;
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(cascade =
+            {
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST,
+                    CascadeType.DETACH,
+                    CascadeType.REFRESH,
+                    CascadeType.REMOVE
+            },
+            fetch = FetchType.LAZY,
+            orphanRemoval = true,
+            mappedBy = "actor")
     private Set<ActorState> actorStates;
-
 }
