@@ -39,18 +39,6 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.save(article);
     }
 
-    private void flushArticleDtoToArticle(Article article, ArticleDto articleDto) {
-        if (articleDto.getTitle() != null) {
-            article.setTitle(articleDto.getTitle());
-        }
-        if (articleDto.getAnnotation() != null) {
-            article.setAnnotation(articleDto.getAnnotation());
-        }
-        if (articleDto.getContent() != null) {
-            article.setContent(articleDto.getContent());
-        }
-    }
-
     @Override
     public Optional<Article> findById(Long id) {
         return articleRepository.findById(id);
@@ -64,5 +52,18 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void deleteById(Long id) {
         articleRepository.deleteById(id);
+    }
+
+
+    private void flushArticleDtoToArticle(Article article, ArticleDto articleDto) {
+        if (articleDto.getTitle() != null) {
+            article.setTitle(articleDto.getTitle());
+        }
+        if (articleDto.getAnnotation() != null) {
+            article.setAnnotation(articleDto.getAnnotation());
+        }
+        if (articleDto.getContent() != null) {
+            article.setContent(articleDto.getContent());
+        }
     }
 }

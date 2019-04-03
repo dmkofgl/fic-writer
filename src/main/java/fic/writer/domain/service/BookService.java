@@ -1,6 +1,26 @@
 package fic.writer.domain.service;
 
 import fic.writer.domain.entity.Book;
+import fic.writer.domain.entity.dto.BookDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-public interface BookService extends CrudService<Book, Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface BookService {
+
+    List<Book> findAll();
+
+    Page<Book> findPage(Pageable pageable);
+
+    Optional<Book> findById(Long aLong);
+
+    Book create(BookDto bookDto);
+
+    Book update(Long id, BookDto bookDto);
+
+    void delete(Book book);
+
+    void deleteById(Long aLong);
 }

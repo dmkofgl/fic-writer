@@ -1,6 +1,7 @@
 package fic.writer.domain.service.impl;
 
 import fic.writer.domain.entity.Book;
+import fic.writer.domain.entity.dto.BookDto;
 import fic.writer.domain.repository.BookRepository;
 import fic.writer.domain.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book save(Book book) {
+    public Book create(BookDto bookDto) {
+        Book book = Book.builder().build();
+        flushBookDtoToBook(book, bookDto);
+        return bookRepository.save(book);
+    }
+
+    @Override
+    public Book update(Long id, BookDto bookDto) {
+        Book book = bookRepository.getOne(id);
+        flushBookDtoToBook(book, bookDto);
         return bookRepository.save(book);
     }
 
@@ -50,5 +60,20 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteById(Long id) {
         bookRepository.deleteById(id);
+    }
+
+    private void flushBookDtoToBook(Book book, BookDto bookDto) {
+        if (bookDto.getTitle() != null) {
+            book.setTitle(bookDto.getTitle());
+        }
+        if (bookDto.getDescription() != null) {
+            book.setDescription(bookDto.getDescription());
+        }
+        if (bookDto.getSize() != null) {
+            bookDto.setSize(bookDto.getSize());
+        }
+        if (bookDto.getState() != null) {
+            bookDto.setState(bookDto.getState());
+        }
     }
 }
