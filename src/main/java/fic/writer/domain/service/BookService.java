@@ -1,6 +1,7 @@
 package fic.writer.domain.service;
 
 import fic.writer.domain.entity.Book;
+import fic.writer.domain.entity.dto.ArticleDto;
 import fic.writer.domain.entity.dto.BookDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,10 @@ public interface BookService {
     Book create(BookDto bookDto);
 
     Book update(Long id, BookDto bookDto);
+
+    Book addArticle(Long bookId, ArticleDto articleDto);
+
+    Book removeArticle(Long bookId, Long articleId);
 
     void delete(Book book);
 

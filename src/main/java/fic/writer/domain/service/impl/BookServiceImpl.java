@@ -1,6 +1,8 @@
 package fic.writer.domain.service.impl;
 
+import fic.writer.domain.entity.Article;
 import fic.writer.domain.entity.Book;
+import fic.writer.domain.entity.dto.ArticleDto;
 import fic.writer.domain.entity.dto.BookDto;
 import fic.writer.domain.repository.BookRepository;
 import fic.writer.domain.service.BookService;
@@ -50,6 +52,36 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.getOne(id);
         flushBookDtoToBook(book, bookDto);
         return bookRepository.save(book);
+    }
+
+    @Override
+    public Book addArticle(Long bookId, ArticleDto articleDto) {
+        Book book = bookRepository.getOne(bookId);
+        Article article = Article.builder().build();
+        flushArticleDtoToArticle(article, articleDto);
+        book.getArticles().add(article);
+        bookRepository.save(book);
+        return book;
+    }
+
+    @Override
+    public Book removeArticle(Long bookId, Long articleId) {
+        Book book = bookRepository.getOne(bookId);
+        book.getArticles().removeIf(article -> article.getId().equals(articleId));
+        bookRepository.save(book);
+        return book;
+    }
+
+    private void flushArticleDtoToArticle(Article article, ArticleDto articleDto) {
+        if (articleDto.getTitle() != null) {
+            article.setTitle(articleDto.getTitle());
+        }
+        if (articleDto.getAnnotation() != null) {
+            article.setAnnotation(articleDto.getAnnotation());
+        }
+        if (articleDto.getContent() != null) {
+            article.setContent(articleDto.getContent());
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package fic.writer.domain.service;
 
 import fic.writer.domain.entity.Book;
+import fic.writer.domain.entity.dto.BookDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -19,10 +20,11 @@ public class BookServiceTest {
 
     @Test
     public void createBook_shouldFindByGeneratedId() {
+        final int SIZE_BEFORE = bookService.findAll().size();
         Book emptyBook = Book.builder().build();
-        bookService.save(emptyBook);
-        assertNotNull(emptyBook.getId());
-        assertTrue(bookService.findById(emptyBook.getId()).isPresent());
+        bookService.create(BookDto.of(emptyBook));
+
+        assertNotEquals(SIZE_BEFORE, bookService.findAll().size());
     }
 
     @Test
