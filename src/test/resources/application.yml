@@ -7,7 +7,7 @@ spring:
     properties:
       hibernate:
         hbm2ddl:
-          import_files: data/actor.sql, data/article.sql, data/actor_state.sql, data/book.sql
+          import_files: data/user.sql, data/actor.sql, data/article.sql, data/actor_state.sql, data/book.sql
 logging:
   level:
     org:
