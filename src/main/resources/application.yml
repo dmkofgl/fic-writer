@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: db-mysql
+logging:
+  level:
+    org:
+      springframework: INFO
+server:
+  port: 8080
