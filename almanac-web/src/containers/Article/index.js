@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import agent from '../../agent';
 import { Link } from 'react-router-dom';
 import { ARTICLE_PAGE_LOADED, ARTICLE_PAGE_UNLOADED, DELETE_ARTICLE } from '../../constants/actionTypes';
+import marked from 'marked';
 
 const mapStateToProps = state => ({
     ...state.article,
@@ -48,7 +49,7 @@ class Book extends React.Component {
                         <h1>{article.title}</h1>
                     </div>
                     <div className="col">
-                    <Link to={`${this.props.match.url}/edit`} className="btn btn-primary" >edit</Link>
+                        <Link to={`${this.props.match.url}/edit`} className="btn btn-primary" >edit</Link>
                         <button className="btn btn-danger" onClick={this.deleteArticle}>remove</button></div>
 
                     <div >
@@ -65,7 +66,7 @@ class Book extends React.Component {
                     <hr />
                     <div className="col">
                         <div className="container">
-                            <p dangerouslySetInnerHTML={{ __html: article.content }}></p>
+                            <p dangerouslySetInnerHTML={{ __html: marked(article.content) }}></p>
                         </div>
                     </div>
                 </div>

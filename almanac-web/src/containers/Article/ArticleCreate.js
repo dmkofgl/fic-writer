@@ -1,25 +1,26 @@
 import React from 'react';
 import agent from '../../agent';
-import { connect } from 'react-redux';
 import {
     CREATE_ARTICLE
 } from '../../constants/actionTypes';
 import { Editor } from '@tinymce/tinymce-react';
+import RichTextEditor from 'react-rte';
 
 class ArticleCreate extends React.Component {
     constructor() {
         super();
         this.state = {
-            article: {}
+            article: { content: RichTextEditor.createEmptyValue() }
         }
         this.updateField = this.updateField.bind(this);
         this.createArticle = this.createArticle.bind(this);
     };
     createArticle() {
         var article = this.state.article;
+        article.content = this.state.article.content.toString('markdown');
         const payload = agent.Articles.create(this.props.match.params.bookId,
             { ...article });
-        this.setState({ article: {} });
+        this.setState({ article: { content: RichTextEditor.createEmptyValue() } });
         this.props.history.push(`/books/${this.props.match.params.bookId}/edit`)
     };
     updateField(event) {
@@ -27,7 +28,11 @@ class ArticleCreate extends React.Component {
         this.setState(
             { article: article }
         );
-    }
+    }    
+    onChangeRte = (value) => {
+        var article = { ...this.state.article,content: value };
+        this.setState({ article: article });
+    };
     render() {
         var article = this.state.article;
         if (this.state.redirectTo) {
@@ -51,7 +56,10 @@ class ArticleCreate extends React.Component {
                     </input>
                 </div >
                 <div className="card-block">
-                            <Editor value={article && article.content}   name="content" onEditorChange={this.updateField} />
+                    <RichTextEditor
+                        value={article && article.content}
+                        onChange={this.onChangeRte}
+                    />
                 </div>
                 <div className="card-footer">
                     <button

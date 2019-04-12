@@ -32,8 +32,8 @@ class ArticleCreate extends React.Component {
         this.props.onLoad(Promise.all([getArticle]));
     }
     componentWillReceiveProps(newProps) {
-        var article = { ...newProps.article  };
-        article.content= RichTextEditor.createValueFromString(article.content,"html")
+        var article = { ...newProps.article };
+        article.content = article.content ? RichTextEditor.createValueFromString(article.content, "markdown") : RichTextEditor.createEmptyValue();
         this.setState({ article: article })
     }
     componentWillUnmount() {
@@ -41,7 +41,7 @@ class ArticleCreate extends React.Component {
     }
     updateArticle() {
         var article = this.state.article;
-        article.content = this.state.article.content.toString('html');
+        article.content = this.state.article.content.toString('markdown');
         const payload = agent.Articles.update(this.props.match.params.bookId, this.props.match.params.articleId,
             { ...article });
 
@@ -49,10 +49,10 @@ class ArticleCreate extends React.Component {
         this.props.history.push(`/books/${this.props.match.params.bookId}`)
     };
     onChangeRte = (value) => {
-        var article = { ...this.state.article,content: value };
+        var article = { ...this.state.article, content: value };
         this.setState({ article: article });
     };
-    updateField=(event)=> {
+    updateField = (event) => {
         var article = { ...this.state.article, [event.target.name]: event.target.value };
         this.setState(
             { article: article }

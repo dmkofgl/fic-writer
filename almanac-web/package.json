@@ -6,6 +6,7 @@
     "@tinymce/tinymce-react": "^3.0.1",
     "axios": "^0.18.0",
     "history": "^4.6.3",
+    "marked": "^0.6.2",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.23",
     "prismic-reactjs": "^0.3.2",
