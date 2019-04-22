@@ -6,7 +6,8 @@ import auth from '../../reducers/auth';
 
 const mapStateToProps = state => ({
     ...state.book,
-    currentUser: state.common.currentUser
+    currentUser: state.common.currentUser,
+    token: state.common.token
 });
 
 class ProfilePreview extends React.Component {
@@ -19,7 +20,12 @@ class ProfilePreview extends React.Component {
     componentWillMount() {
         console.dir(this.props.link)
         if (this.props.link) {
-            axios.get(this.props.link)
+            const req = {
+                url: this.props.link,
+                headers: { Authorization: "bearer " + this.props.token },
+                method: 'GET'
+            };
+            axios.get(req.url,req)
                 .then(response => this.setState({ ...this.state, author: response.data }))
         }
     }

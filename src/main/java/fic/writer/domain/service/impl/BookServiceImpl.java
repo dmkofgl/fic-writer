@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityListeners;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -53,7 +54,8 @@ public class BookServiceImpl implements BookService {
     public Book create(BookDto bookDto) {
         Book book = Book.builder().build();
         flushBookDtoToBook(book, bookDto);
-        return bookRepository.save(book);
+        Book savedBook = bookRepository.save(book);
+        return savedBook;
     }
 
     @Override
@@ -68,8 +70,10 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.getOne(bookId);
         Article article = Article.builder().build();
         flushArticleDtoToArticle(article, articleDto);
-        article.setBook(Book.builder().id(bookId).build());
-        book.getArticles().add(article);
+        article.setBook(book);
+        Set<Article> articles = new HashSet<>(book.getArticles());
+        articles.add(article);
+        book.setArticles(articles);
         bookRepository.save(book);
         return book;
     }

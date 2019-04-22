@@ -41,10 +41,14 @@ public class UserControllerTest {
 
     @Test
     public void getUsers_whenDtoIsEmpty_shouldReturnOk() throws Exception {
+        final long ID = 1L;
+        final String USERNAME = "testUsername";
+
         List<User> userList = new ArrayList<>();
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("testUsername");
+        User user = User.builder()
+                .id(ID)
+                .username(USERNAME)
+                .build();
         userList.add(user);
         Mockito.when(userService.findAll()).thenReturn(userList);
 
@@ -57,9 +61,11 @@ public class UserControllerTest {
     @Test
     public void getUserById_whenUserExists_shouldReturnOk() throws Exception {
         final long ID = 1L;
-        User user = new User();
-        user.setId(ID);
-        user.setUsername("testUsername");
+        final String USERNAME = "testUsername";
+        User user = User.builder()
+                .id(ID)
+                .username(USERNAME)
+                .build();
 
         Mockito.when(userService.findById(1L)).thenReturn(Optional.of(user));
 
@@ -72,7 +78,9 @@ public class UserControllerTest {
     @Test
     public void createUser() throws Exception {
         final Long USER_ID = 1L;
-        final String username = "testUsername", about = "about", information = "inform";
+        final String username = "testUsername",
+                about = "about",
+                information = "inform";
         UserDto dto = new UserDto(username, about, information);
         ObjectMapper mapper = new ObjectMapper();
 
@@ -81,8 +89,6 @@ public class UserControllerTest {
                 .username(username)
                 .about(about)
                 .information(information)
-                .booksAsAuthor(new HashSet<>())
-                .booksAsSubAuthor(new HashSet<>())
                 .build();
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

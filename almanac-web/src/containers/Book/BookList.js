@@ -8,6 +8,12 @@ const BookList = props => {
       <div className="article-preview">Loading...</div>
     );
   }
+  const changeSize = e => {
+    console.dir(e.target.value)
+    localStorage.setItem("page_size", e.target.value)
+    this.state = { size: e.target.value }
+
+  }
 
   if (props.books.length === 0) {
     return (
@@ -18,11 +24,19 @@ const BookList = props => {
   }
 
   return (
+
     <div>
+      <input className="form-control"
+        placeholder="page size"
+        value={this.state && this.state.size && this.state.size}
+        onChange={changeSize}
+        name="page"
+        type="number">
+      </input>
       {
         props.books.map(book => {
           return (
-          <BookPreview book={book} />
+            <BookPreview book={book} />
           );
         })
       }

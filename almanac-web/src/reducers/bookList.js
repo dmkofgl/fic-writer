@@ -16,15 +16,17 @@ export default (state = {}, action) => {
         currentPage: action.payload.page.number
       };
     case HOME_PAGE_LOADED:
-      return {
-        ...state,
-        pager: action.payload[0].page,
-        books: action.payload[0]._embedded
-          ? action.payload[0]._embedded.bookResponseList
-          : [],
-        booksCount: action.payload[0].page.totalElements,
-        currentPage: 0
-      };
+      return !action.error ?
+        {
+          ...state,
+          pager: action.payload[0].page,
+          books: action.payload[0]._embedded
+            ? action.payload[0]._embedded.bookResponseList
+            : [],
+          booksCount: action.payload[0].page.totalElements,
+          currentPage: 0
+        }
+        : { ...state, error: action.payload };
     case HOME_PAGE_UNLOADED:
       return {};
     default:

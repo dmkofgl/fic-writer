@@ -1,6 +1,8 @@
 spring:
   profiles:
-    active: db-mysql
+    active: db-mysql, oauth-github, oauth-react-client
+  main:
+    allow-bean-definition-overriding: true
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -12,4 +14,3 @@ logging:
   level:
     org:
       springframework: INFO
-

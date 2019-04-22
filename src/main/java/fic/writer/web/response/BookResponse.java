@@ -35,10 +35,12 @@ public class BookResponse extends ResourceSupport {
     private Set<Genre> genres;
     private Set<Link> actors;
     private Link articles;
+    private Long pageCount;
 
     public BookResponse(Book book) {
         this.bookId = book.getId();
         title = book.getTitle();
+        pageCount = book.getPageCount();
         if (book.getAuthor() != null) {
             Long authorId = book.getAuthor().getId();
             author = linkTo(methodOn(UserController.class, authorId).getUserById(authorId)).withRel("author");

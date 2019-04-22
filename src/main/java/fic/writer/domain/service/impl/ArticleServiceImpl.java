@@ -4,18 +4,25 @@ import fic.writer.domain.entity.Article;
 import fic.writer.domain.entity.dto.ArticleDto;
 import fic.writer.domain.repository.ArticleRepository;
 import fic.writer.domain.service.ArticleService;
+import fic.writer.domain.service.BookService;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityExistsException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
     private ArticleRepository articleRepository;
+
+    private BookService bookService;
 
     @Autowired
     public ArticleServiceImpl(ArticleRepository articleRepository) {
@@ -57,6 +64,19 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void deleteById(Long id) {
         articleRepository.deleteById(id);
+    }
+
+    @Override
+    public String parseArticleContentFromFile(MultipartFile multipartFile) {
+        String fileContent = "";
+        try {
+            ByteArrayOutputStream stringWriter = new ByteArrayOutputStream();
+            IOUtils.copy(multipartFile.getInputStream(), stringWriter);
+            fileContent = stringWriter.toString();
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+        return fileContent;
     }
 
 

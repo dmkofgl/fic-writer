@@ -17,6 +17,5 @@ public class CustomUser {
     private Long id;
     @OneToOne(fetch = FetchType.EAGER)
     private User profile;
-    private String email;
     private String password;
 }

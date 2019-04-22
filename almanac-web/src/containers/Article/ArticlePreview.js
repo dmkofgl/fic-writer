@@ -13,7 +13,7 @@ const ArticlePreview = props => {
             <h6 >{article.title}</h6>
           </Link>
           {article.created &&
-            <h6 className="float-right"> <Moment format=" HH:mm, DD/MM/YYYY" date={article.created} /></h6>}
+            <h6 className="float-right"> <Moment format=" HH:mm, DD/MM/YYYY" date={article.created} /></h6>}         
         </div >
       </div>
     </div>

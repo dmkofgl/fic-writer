@@ -9,12 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
     private static final String ID_TEMPLATE_PATH = "/{userId}";
     private static final String ID_TEMPLATE = "userId";
@@ -57,5 +57,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(Long id) {
         userService.deleteById(id);
+    }
+
+    @RequestMapping({"/user", "/me"})
+    public UserResponse user(Principal principal) {
+        UserResponse user = userService.findByEmail(principal.getName()).map(UserResponse::new).orElseThrow(EntityNotFoundException::new);
+        return user;
     }
 }

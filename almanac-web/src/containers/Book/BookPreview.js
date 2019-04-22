@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import Profilepreview from '../Profile/ProfilePreview';
 
 const mapStateToProps = state => ({
   ...state.book,
-  currentUser: state.common.currentUser
+  currentUser: state.auth.currentUser,
+  token: state.common.token
 });
 
 class BookPreview extends React.Component {
@@ -17,8 +17,15 @@ class BookPreview extends React.Component {
     }
   }
   componentWillMount() {
-    if (this.props.book) {
-      axios.get(this.props.book.author && this.props.book.author.href)
+    if (this.props.book
+      && this.props.book.author
+      && this.props.book.author.href) {
+      let req = {
+        url: this.props.book.author.href,
+        headers: { Authorization: "bearer " + this.props.token },
+        method: 'GET'
+      };
+      axios.get(req.url, req)
         .then(response => {
           this.setState({ ...this.state, author: response.data })
         })
@@ -33,10 +40,13 @@ class BookPreview extends React.Component {
         <div className="row">
           <div className="col-md-11 bg-light">
             <Link to={`/books/${book.bookId}`} className="badge badge-light">
-              <h1 >{book.title}</h1>
+              <h6 >{book.title}</h6>
             </Link>
             <hr />
-            <p>{book.description}</p>
+            <p> {book.description
+              && (book.description.length < 120
+                ? book.description
+                : book.description.substring(0, 120) + "...")}</p>
           </div >
         </div>
       </div>

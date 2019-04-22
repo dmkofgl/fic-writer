@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/books/{bookId}/articles", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://localhost:3000")
 public class ArticleController {
     private static final String ID_TEMPLATE_PATH = "/{articleId}";
     private static final String ID_TEMPLATE = "articleId";
@@ -58,4 +57,6 @@ public class ArticleController {
     public void updateArticle(@PathVariable(ID_TEMPLATE) Long articleId, @RequestBody ArticleDto articleDto) {
         articleService.update(articleId, articleDto);
     }
+
+
 }

@@ -2,7 +2,7 @@ import agent from './agent';
 import Header from './Header';
 import React from 'react';
 import { connect } from 'react-redux';
-import { APP_LOAD, REDIRECT } from './constants/actionTypes';
+import { APP_LOAD, REDIRECT, SIGN_IN, LOGOUT } from './constants/actionTypes';
 import { Route, Switch } from 'react-router-dom';
 import Home from './containers/Home';
 import { store } from './store';
@@ -25,7 +25,7 @@ const mapStateToProps = state => {
     appLoaded: state.common.appLoaded,
     appName: state.common.appName,
     currentUser: state.common.currentUser,
-    redirectTo: state.common.redirectTo
+    redirectTo: state.common.redirectTo,
   }
 };
 
@@ -33,33 +33,47 @@ const mapDispatchToProps = dispatch => ({
   onLoad: (payload, token) =>
     dispatch({ type: APP_LOAD, payload, token, skipTracking: true }),
   onRedirect: () =>
-    dispatch({ type: REDIRECT })
+    dispatch({ type: REDIRECT }),
+  onLoadProfile: (payload) =>
+    dispatch({ type: SIGN_IN, payload }),
+  onClickLogout: () => dispatch({ type: LOGOUT })
 });
+
 
 class App extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.redirectTo) {
-      // this.context.router.replace(nextProps.redirectTo);
       store.dispatch(push(nextProps.redirectTo));
       this.props.onRedirect();
     }
   }
 
   componentWillMount() {
-    const token = window.localStorage.getItem('jwt');
+    const token = window.localStorage.getItem('access_token');
     if (token) {
       agent.setToken(token);
+      this.props.onLoadProfile(agent.Auth.current())
     }
 
     this.props.onLoad(token ? agent.Auth.current() : null, token);
   }
+  logout = () => {
+    this.props.onClickLogout();
+  }
   render() {
+    if (!(window.location.pathname === "/login" ||
+      window.location.pathname === "/register") &&
+      !window.localStorage.getItem('access_token')) {
+      store.dispatch(push("/login"));
+    }
+
     if (this.props.appLoaded) {
       return (
         <div>
           <Header
             appName={this.props.appName}
-            currentUser={this.props.currentUser} />
+            currentUser={this.props.currentUser}
+            onClickLogout={this.logout} />
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/profiles/:id" component={Profile} />
@@ -80,14 +94,11 @@ class App extends React.Component {
       <div>
         <Header
           appName={this.props.appName}
-          currentUser={this.props.currentUser} />
+          currentUser={this.props.currentUser}
+          onClickLogout={this.logout} />
       </div>
     );
   }
 }
-
-// App.contextTypes = {
-//   router: PropTypes.object.isRequired
-// };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

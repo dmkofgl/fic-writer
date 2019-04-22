@@ -4,6 +4,7 @@ import fic.writer.domain.entity.Article;
 import fic.writer.domain.entity.dto.ArticleDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +23,6 @@ public interface ArticleService {
     void delete(Article article);
 
     void deleteById(Long aLong);
+
+    String parseArticleContentFromFile(MultipartFile multipartFile);
 }

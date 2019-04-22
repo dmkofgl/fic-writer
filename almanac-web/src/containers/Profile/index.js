@@ -6,7 +6,6 @@ import {
     PROFILE_PAGE_LOADED,
     PROFILE_PAGE_UNLOADED
 } from '../../constants/actionTypes';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const mapStateToProps = state => ({
@@ -33,8 +32,6 @@ class Profile extends React.Component {
     componentWillMount() {
         var getProfile = agent.Profile.get(this.props.match.params.id);
         this.props.onLoad(Promise.all([getProfile]));
-        console.dir(this.props)
-
     }
     componentWillUnmount() {
         this.props.onUnload();
@@ -80,8 +77,8 @@ class Profile extends React.Component {
                 <div><h6>Books as coauthor: </h6>
                     {booksAsSubAuthor.length === 0 &&
                         <h6 >There is no any book as coauthor</h6>
-                   }
-                   
+                    }
+
                     <ol> {
                         booksAsSubAuthor && booksAsSubAuthor.map(book =>
                             <li>
@@ -91,6 +88,8 @@ class Profile extends React.Component {
                             </li>
                         )}
                     </ol>
+                    <Link to={`/books/create`} className="btn btn-success">
+                    Create book</Link>
                 </div>
             </div>
 
