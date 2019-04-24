@@ -21,4 +21,3 @@ public class SpringSecurityAuditorAware implements AuditorAware<User> {
         return user;
     }
 }
-
