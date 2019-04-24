@@ -3,6 +3,7 @@ package fic.writer.web.controller;
 import fic.writer.domain.entity.Book;
 import fic.writer.domain.entity.dto.BookDto;
 import fic.writer.domain.service.BookService;
+import fic.writer.domain.service.UserService;
 import fic.writer.web.response.BookResponse;
 import fic.writer.web.response.PageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +21,19 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping(value = "/books", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://localhost:3000")
 public class BookController {
     private static final String ID_TEMPLATE_PATH = "/{bookId}";
     private static final String ID_TEMPLATE = "bookId";
 
     private BookService bookService;
+    private UserService userService;
 
     @Autowired
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, UserService userService) {
         this.bookService = bookService;
+        this.userService = userService;
     }
+
 
     @GetMapping
     public PageResponse<BookResponse> getAllBooks(Pageable pageable) {
@@ -49,6 +52,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.CREATED)
     public BookResponse createBook(@RequestBody BookDto book) {
         Book savedBook = bookService.create(book);
+        userService.addBookAsAuthor(savedBook.getAuthor().getId(), savedBook.getId());
         return new BookResponse(savedBook);
     }
 
