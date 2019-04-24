@@ -1,0 +1,2 @@
+INSERT INTO user(id,about, information, username)VALUES(1,'I am author',' zaraza-takaja@mail.ru','Zaraza takaja');
+INSERT INTO user(id,about, information, username)VALUES(2,'I am author, too',' zaraza-takaja@mail.ru','@uthor');
