@@ -21,6 +21,7 @@ public class ArticleResponse extends ResourceSupport {
     private Date created;
     private String content;
     private String annotation;
+    private Long pageCount;
 
     public ArticleResponse(Article article) {
         articleId = article.getId();
@@ -28,6 +29,7 @@ public class ArticleResponse extends ResourceSupport {
         created = article.getCreated();
         content = article.getContent();
         annotation = article.getAnnotation();
+        pageCount = article.getPageCount();
         addSelfLink(articleId);
     }
 
