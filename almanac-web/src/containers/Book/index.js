@@ -12,7 +12,8 @@ import axios from 'axios';
 
 const mapStateToProps = state => ({
     ...state.book,
-    currentUser: state.common.currentUser
+    currentUser: state.common.currentUser,
+    token: state.common.token
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -30,7 +31,17 @@ class Book extends React.Component {
     }
     downloadBook() {
         var links = this.props.book._links;
-        axios.get(links && links.download.href)
+
+        if (links
+            && links.download
+            && links.download.href) {
+            let req = {
+                url: links.download.href,
+                headers: { Authorization: "bearer " + this.props.token },
+                method: 'GET'
+            }
+            axios.get(req)
+        }
     }
     componentWillMount() {
         var getBook = agent.Books.get(this.props.match.params.id);
@@ -57,7 +68,7 @@ class Book extends React.Component {
                         {this.props.book._links
                             && this.props.book._links.download
                             && <a className="btn btn-warning"
-                                href={`${this.props.book._links.download.href}`}
+                                href={`${this.props.book._links.download.href + `?access_token=${this.props.token}`}`}
                                 target="_blank">
                                 download</a>}
                     </div>
@@ -85,7 +96,7 @@ class Book extends React.Component {
                     <div className="row">
                         <div className="col ">
                             <div>
-                                <p> Size: {book.size}</p>
+                                <p> Size: {book.pageCount}</p>
                                 <p> State: {book.state}</p>
 
                             </div>

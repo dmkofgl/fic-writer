@@ -2,7 +2,7 @@ import React from 'react';
 import agent from '../agent';
 import { connect } from 'react-redux';
 import { SET_PAGE } from '../constants/actionTypes';
-import { PAGE_SIZE } from '../constants/commonConstants';
+import { DEFAULT_PAGE_SIZE } from '../constants/commonConstants';
 
 const mapDispatchToProps = dispatch => ({
   onSetPage: (page, payload) =>
@@ -10,7 +10,10 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const ListPagination = props => {
-  if (props.booksCount <= PAGE_SIZE) {
+  let pageSize = localStorage.getItem("page_size")
+    ? localStorage.getItem("page_size")
+    : DEFAULT_PAGE_SIZE;
+  if (props.booksCount <= pageSize) {
     return null;
   }
 
@@ -20,7 +23,7 @@ const ListPagination = props => {
   }
 
   const setPage = page => {
-      props.onSetPage(page, agent.Books.all(page))
+    props.onSetPage(page, agent.Books.all(page))
   };
 
   return (
@@ -36,7 +39,7 @@ const ListPagination = props => {
             };
             return (
               <li
-                className={ isCurrent ? 'page-item active' : 'page-item' }
+                className={isCurrent ? 'page-item active' : 'page-item'}
                 onClick={onClick}
                 key={v.toString()}>
 
@@ -46,7 +49,6 @@ const ListPagination = props => {
             );
           })
         }
-
       </ul>
     </nav>
   );

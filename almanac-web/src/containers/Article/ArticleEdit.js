@@ -33,6 +33,7 @@ class ArticleCreate extends React.Component {
     }
     componentWillReceiveProps(newProps) {
         var article = { ...newProps.article };
+        
         article.content = article.content ? RichTextEditor.createValueFromString(article.content, "markdown") : RichTextEditor.createEmptyValue();
         this.setState({ article: article })
     }

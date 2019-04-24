@@ -50,11 +50,9 @@ class Book extends React.Component {
                     </div>
                     <div className="col">
                         <Link to={`${this.props.match.url}/edit`} className="btn btn-primary" >edit</Link>
-                        <button className="btn btn-danger" onClick={this.deleteArticle}>remove</button></div>
-
-                    <div >
+                        <button className="btn btn-danger" onClick={this.deleteArticle}>remove</button>
+                        <Link to={`/books/${this.props.match.params.bookId}`} className="btn btn-outline-info" >To book</Link>
                     </div>
-                    <Link to={`/books/${this.props.match.params.bookId}`} >to book</Link>
                 </div>
                 <div >
                     <div>
@@ -63,11 +61,16 @@ class Book extends React.Component {
                             {article.annotation}
                         </p>
                     </div>
-                    <hr />
-                    <div className="col">
-                        <div className="container">
-                            <p dangerouslySetInnerHTML={{ __html: marked(article.content) }}></p>
-                        </div>
+                    {article.pageCount &&
+                        <div>
+                            <p>Page count: {article.pageCount} </p>
+                        </div>}
+                </div>
+
+                <hr />
+                <div className="col">
+                    <div className="container">
+                        <p dangerouslySetInnerHTML={{ __html: article.content ? marked(article.content) : "" }}></p>
                     </div>
                 </div>
             </div>

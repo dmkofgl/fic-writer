@@ -6,8 +6,11 @@ import { connect } from 'react-redux';
 import {
   UPDATE_FIELD_AUTH,
   LOGIN,
-  LOGIN_PAGE_UNLOADED
+  LOGIN_PAGE_UNLOADED,
+  SIGN_IN
 } from '../../constants/actionTypes';
+import OAuthProvider from './OAuthProvider';
+import { providerConfig } from '../../constants/config';
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -33,6 +36,17 @@ class Login extends React.Component {
     };
   }
 
+  onOAuthProviderLogin = (data) => {
+    let token = JSON.stringify(data.code) || JSON.stringify(data);
+    window.localStorage.setItem('OAuthProvider_token', token);
+    this.setState({ token: token });
+    window.location = "/home"
+  }
+
+  onOAuthProviderLoginFailure = (err) => {
+    console.log("something wrong")
+    console.error(err);
+  }
   componentWillUnmount() {
     this.props.onUnload();
   }
@@ -82,9 +96,12 @@ class Login extends React.Component {
                     disabled={this.props.inProgress}>
                     Sign in
                   </button>
-
                 </fieldset>
               </form>
+              <OAuthProvider
+                config={providerConfig}
+                className="btn btn-success"
+              />
             </div>
 
           </div>

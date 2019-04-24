@@ -1,6 +1,6 @@
 import superagentPromise from 'superagent-promise';
 import _superagent from 'superagent';
-import { PAGE_SIZE } from './constants/commonConstants'
+import { DEFAULT_PAGE_SIZE } from './constants/commonConstants'
 
 const superagent = superagentPromise(_superagent, global.Promise);
 
@@ -12,8 +12,12 @@ const responseBody = res => res.body;
 let token = null;
 const tokenPlugin = req => {
   if (token) {
-    req.set('authorization', `Token ${token}`);
+    req.set('authorization', `Bearer ${token}`);
   }
+}
+let basicAuth = "YWNtZTphY21lc2VjcmV0";
+const basicPlugin = req => {
+  req.set('authorization', `Basic ${basicAuth}`)
 }
 
 const requests = {
@@ -24,8 +28,11 @@ const requests = {
   put: (url, body) =>
     superagent.put(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody),
   post: (url, body) =>
-    superagent.post(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody)
+    superagent.post(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody),
+  postWithBasic: (url, body) =>
+    superagent.post(`${API_ROOT}${url}?grant_type=password&username=${body.username}&password=${body.password}`).use(basicPlugin).then(responseBody)
 };
+
 const directRequest = {
   del: url =>
     superagent.del(`${url}`).use(tokenPlugin).then(responseBody),
@@ -39,9 +46,9 @@ const directRequest = {
 
 const Auth = {
   current: () =>
-    requests.get('/user'),
+    requests.get('/users/user'),
   login: (email, password) =>
-    requests.post('/users/login', { user: { email, password } }),
+    requests.postWithBasic('/oauth/token', { username: email, password: password }),
   register: (username, email, password) =>
     requests.post('/users', { username, email, password }),
   save: user =>
@@ -53,10 +60,9 @@ const Tags = {
 };
 
 const limit = (size, page) => `size=${size}&page=${page ? page : 0}`;
-const omitSlug = article => Object.assign({}, article, { slug: undefined })
 const Books = {
   all: page =>
-    requests.get(`/books?${limit(PAGE_SIZE, page)}`),
+    requests.get(`/books?${limit(localStorage.getItem("page_size") ? localStorage.getItem("page_size") : DEFAULT_PAGE_SIZE, page)}`),
   del: slug =>
     requests.del(`/books/${slug}`),
   get: slug =>
@@ -78,12 +84,10 @@ const Articles = {
 };
 
 const Profile = {
-  follow: username =>
-    requests.post(`/profiles/${username}/follow`),
   get: id =>
     requests.get(`/users/${id}`),
-  unfollow: username =>
-    requests.del(`/profiles/${username}/follow`)
+  me: () =>
+    requests.get(`/users/me`)
 };
 
 export default {
