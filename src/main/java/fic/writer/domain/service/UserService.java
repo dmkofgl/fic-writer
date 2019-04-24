@@ -17,7 +17,11 @@ public interface UserService {
 
     Optional<User> findByUsername(String username);
 
+    Optional<User> findByEmail(String email);
+
     User create(UserDto user);
+
+    User addBookAsAuthor(Long userId, Long bookId);
 
     User update(Long userId, UserDto user);
 

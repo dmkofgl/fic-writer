@@ -1,5 +1,6 @@
 package fic.writer.domain.service.impl;
 
+import fic.writer.domain.entity.Book;
 import fic.writer.domain.entity.User;
 import fic.writer.domain.entity.dto.UserDto;
 import fic.writer.domain.repository.UserRepository;
@@ -43,11 +44,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
     public User create(UserDto userDto) {
         User user = User.builder().build();
         flushUserDtoToUser(user, userDto);
         return userRepository.save(user);
 
+    }
+
+    @Override
+    public User addBookAsAuthor(Long userId, Long bookId) {
+        User user = userRepository.findById(userId).get();
+        Book book = Book.builder().id(bookId).build();
+        user.getBooksAsAuthor().add(book);
+        return userRepository.save(user);
     }
 
     @Override

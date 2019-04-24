@@ -24,4 +24,5 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY)
     @Singular("booksAsAuthor")
     private Set<Book> booksAsAuthor;
+    private String email;
 }

@@ -33,6 +33,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-test")
     compile("org.springframework.boot:spring-boot-starter-hateoas")
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.3.RELEASE")
 
     compile("org.apache.poi:poi:4.1.0")
     compile("fr.opensagres.xdocreport:org.apache.poi.xwpf.converter.xhtml:1.0.4")

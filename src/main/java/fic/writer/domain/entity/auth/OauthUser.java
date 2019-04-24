@@ -16,7 +16,7 @@ public class OauthUser {
     @Id
     @GeneratedValue
     private Long id;
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User profile;
     private String token;
     private Date expireDate;
