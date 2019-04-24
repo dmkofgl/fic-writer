@@ -61,7 +61,10 @@ public class Book {
 
     @PostLoad
     private void calculatePageCount() {
-        this.pageCount = articles.stream().mapToLong(Article::getPageCount).sum();
+        this.pageCount = 0L;
+        if (articles != null) {
+            pageCount = articles.stream().mapToLong(Article::getPageCount).sum();
+        }
     }
 
     @PostPersist

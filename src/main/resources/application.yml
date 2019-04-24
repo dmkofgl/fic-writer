@@ -2,7 +2,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   profiles:
-    active: db-mysql, oauth-github, oauth-acme
+    active: db-postgresql, oauth-github, oauth-acme
   servlet:
     multipart:
       max-file-size: 5MB

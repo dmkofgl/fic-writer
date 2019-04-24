@@ -20,14 +20,14 @@ import java.util.Set;
 public class Article {
     private static final int CHARS_IN_PAGE = 1800;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
     @CreatedDate
     private Date created;
     @LastModifiedDate
     private Date lastModify;
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "TEXT")
     private String content;
     private String annotation;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,5 +35,6 @@ public class Article {
     @OneToMany(cascade = CascadeType.REMOVE)
     private Set<ActorState> actorStates;
     @Formula("ceil( CHAR_LENGTH(content)/" + CHARS_IN_PAGE + ")")
-    private Long pageCount;
+    private long pageCount;
+
 }

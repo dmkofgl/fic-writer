@@ -1,12 +1,17 @@
 package fic.writer.domain.service;
 
 import fic.writer.domain.entity.Book;
+import fic.writer.domain.entity.User;
 import fic.writer.domain.entity.dto.BookDto;
+import fic.writer.web.config.security.authorization.CustomUserDetails;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.*;
@@ -17,6 +22,12 @@ public class BookServiceTest {
     @Autowired
     private BookService bookService;
 
+    @Before
+    public void setUserInSecurityContext() {
+        CustomUserDetails customUserDetails = new CustomUserDetails(User.builder().id(1L).build(), "qwerty");
+        TestingAuthenticationToken token = new TestingAuthenticationToken(customUserDetails, null);
+        SecurityContextHolder.getContext().setAuthentication(token);
+    }
     @Test
     public void createBook_shouldChangeCount() {
         final int SIZE_BEFORE = bookService.findAll().size();

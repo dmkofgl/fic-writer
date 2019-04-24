@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/almanac
+    username: postgres
+    password: changeme
+    initialization-mode: always
+    platform: postgres
+  jpa:
+    show-sql: true
+    database: POSTGRESQL
+    generate-ddl: true
+    hibernate:
+      jdbc:
+        lob:
+          non_contextual_creation: true
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        hbm2ddl:
+          import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
+          import_files: data/user.sql, data/actor.sql, data/book.sql, data/article.sql,data/book_article.sql, data/actor_state.sql
+
