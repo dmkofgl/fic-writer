@@ -2,9 +2,9 @@ package fic.writer.domain.service;
 
 import fic.writer.domain.entity.Article;
 import fic.writer.domain.entity.Book;
-import fic.writer.domain.entity.User;
+import fic.writer.domain.entity.Profile;
 import fic.writer.domain.entity.dto.ArticleDto;
-import fic.writer.web.config.security.authorization.CustomUserDetails;
+import fic.writer.web.config.security.authorization.EmbeddedProfileDetails;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +30,8 @@ public class BookAndArticleServicesTest {
 
     @Before
     public void setUserInSecurityContext() {
-        CustomUserDetails customUserDetails = new CustomUserDetails(User.builder().id(1L).build(), "qwerty");
-        TestingAuthenticationToken token = new TestingAuthenticationToken(customUserDetails, null);
+        EmbeddedProfileDetails embeddedProfileDetails = new EmbeddedProfileDetails(Profile.builder().id(1L).build(), "qwerty");
+        TestingAuthenticationToken token = new TestingAuthenticationToken(embeddedProfileDetails, null);
         SecurityContextHolder.getContext().setAuthentication(token);
     }
     @Test

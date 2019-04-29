@@ -2,9 +2,9 @@ package fic.writer.web.controller;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fic.writer.domain.entity.User;
-import fic.writer.domain.entity.dto.UserDto;
-import fic.writer.domain.service.UserService;
+import fic.writer.domain.entity.Profile;
+import fic.writer.domain.entity.dto.ProfileDto;
+import fic.writer.domain.service.ProfileService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = UserController.class, secure = false)
-public class UserControllerTest {
+public class ProfileControllerTest {
     private static final String USERS_PATH = "/users";
     private static final String USER_ID_PATH_TEMPLATE = USERS_PATH + "/{id}";
     @Autowired
@@ -36,7 +36,7 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private UserService userService;
+    private ProfileService profileService;
 
 
     @Test
@@ -44,17 +44,17 @@ public class UserControllerTest {
         final long ID = 1L;
         final String USERNAME = "testUsername";
 
-        List<User> userList = new ArrayList<>();
-        User user = User.builder()
+        List<Profile> profileList = new ArrayList<>();
+        Profile profile = Profile.builder()
                 .id(ID)
                 .username(USERNAME)
                 .build();
-        userList.add(user);
-        Mockito.when(userService.findAll()).thenReturn(userList);
+        profileList.add(profile);
+        Mockito.when(profileService.findAll()).thenReturn(profileList);
 
         mockMvc.perform(get(USERS_PATH))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].username").value(user.getUsername()))
+                .andExpect(jsonPath("$.[0].username").value(profile.getUsername()))
                 .andExpect(jsonPath("$.[0].links.[0].rel").value("self"));
     }
 
@@ -62,16 +62,16 @@ public class UserControllerTest {
     public void getUserById_whenUserExists_shouldReturnOk() throws Exception {
         final long ID = 1L;
         final String USERNAME = "testUsername";
-        User user = User.builder()
+        Profile profile = Profile.builder()
                 .id(ID)
                 .username(USERNAME)
                 .build();
 
-        Mockito.when(userService.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(profileService.findById(1L)).thenReturn(Optional.of(profile));
 
         mockMvc.perform(get(USER_ID_PATH_TEMPLATE, ID))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value(user.getUsername()))
+                .andExpect(jsonPath("$.username").value(profile.getUsername()))
                 .andExpect(jsonPath("$._links.self").hasJsonPath());
     }
 
@@ -81,10 +81,10 @@ public class UserControllerTest {
         final String username = "testUsername",
                 about = "about",
                 information = "inform";
-        UserDto dto = new UserDto(username, about, information);
+        ProfileDto dto = new ProfileDto(username, about, information);
         ObjectMapper mapper = new ObjectMapper();
 
-        User user = User.builder()
+        Profile profile = Profile.builder()
                 .id(USER_ID)
                 .username(username)
                 .about(about)
@@ -93,13 +93,13 @@ public class UserControllerTest {
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String body = mapper.writeValueAsString(dto);
-        Mockito.when(userService.create(any(UserDto.class))).thenReturn(user);
+        Mockito.when(profileService.create(any(ProfileDto.class))).thenReturn(profile);
 
         mockMvc.perform(post(USERS_PATH)
                 .content(body)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.username").value(user.getUsername()))
+                .andExpect(jsonPath("$.username").value(profile.getUsername()))
                 .andExpect(jsonPath("$._links.self").hasJsonPath());
     }
 
@@ -107,24 +107,24 @@ public class UserControllerTest {
     public void updateUser() throws Exception {
         final Long USER_ID = 1L;
         final String NEW_USERNAME = "testUsername";
-        User updatedUser = User.builder()
+        Profile updatedProfile = Profile.builder()
                 .id(USER_ID)
                 .username(NEW_USERNAME)
                 .booksAsAuthor(new HashSet<>())
-                .booksAsSubAuthor(new HashSet<>())
+                .booksAsCoauthor(new HashSet<>())
                 .build();
-        UserDto dto = new UserDto(NEW_USERNAME, null, null);
+        ProfileDto dto = new ProfileDto(NEW_USERNAME, null, null);
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String body = mapper.writeValueAsString(dto);
 
-        Mockito.when(userService.update(anyLong(), any(UserDto.class))).thenReturn(updatedUser);
+        Mockito.when(profileService.update(anyLong(), any(ProfileDto.class))).thenReturn(updatedProfile);
 
         mockMvc.perform(put(USER_ID_PATH_TEMPLATE, USER_ID)
                 .content(body)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value(updatedUser.getUsername()))
+                .andExpect(jsonPath("$.username").value(updatedProfile.getUsername()))
                 .andExpect(jsonPath("$._links.self").hasJsonPath());
 
     }

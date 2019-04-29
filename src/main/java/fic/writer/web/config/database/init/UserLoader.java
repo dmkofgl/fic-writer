@@ -1,9 +1,9 @@
 package fic.writer.web.config.database.init;
 
-import fic.writer.domain.entity.User;
-import fic.writer.domain.entity.auth.CustomUser;
-import fic.writer.domain.repository.CustomUserRepository;
-import fic.writer.domain.repository.UserRepository;
+import fic.writer.domain.entity.Profile;
+import fic.writer.domain.entity.auth.EmbeddedUserDetails;
+import fic.writer.domain.repository.EmbeddedUserDetailsRepository;
+import fic.writer.domain.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -12,25 +12,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserLoader implements ApplicationRunner {
     @Autowired
-    UserRepository userRepository;
+    ProfileRepository profileRepository;
     @Autowired
-    CustomUserRepository customUserRepository;
+    EmbeddedUserDetailsRepository embeddedUserDetailsRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        User user = User.builder()
+        Profile profile = Profile.builder()
                 .id(1L)
-                .information("first user information")
-                .username("user@mail.cc")
+                .information("first profile information")
+                .username("profile@mail.cc")
                 .email("firstUser@mail.com")
                 .build();
-        userRepository.save(user);
-        CustomUser customUser = CustomUser.builder()
+        profileRepository.save(profile);
+        EmbeddedUserDetails embeddedUserDetails = EmbeddedUserDetails.builder()
                 .id(1L)
                 .password("qwerty")
-                .profile(user)
+                .profile(profile)
                 .build();
-        customUserRepository.save(customUser);
+        embeddedUserDetailsRepository.save(embeddedUserDetails);
 
 
     }

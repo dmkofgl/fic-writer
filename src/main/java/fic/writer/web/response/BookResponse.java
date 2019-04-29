@@ -6,6 +6,7 @@ import fic.writer.domain.entity.enums.Size;
 import fic.writer.domain.entity.enums.State;
 import fic.writer.web.controller.ArticleController;
 import fic.writer.web.controller.BookController;
+import fic.writer.web.controller.FileController;
 import fic.writer.web.controller.UserController;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,7 +46,7 @@ public class BookResponse extends ResourceSupport {
             Long authorId = book.getAuthor().getId();
             author = linkTo(methodOn(UserController.class, authorId).getUserById(authorId)).withRel("author");
         }
-        subAuthors = book.getSubAuthors().stream().map(author ->
+        subAuthors = book.getCoauthors().stream().map(author ->
                 linkTo(methodOn(UserController.class, author.getId()).getUserById(author.getId()))
                         .withRel("subauthor")).collect(Collectors.toSet());
         source = book.getSource().stream().map(BookResponse::new).map(ResourceSupport::getId).collect(Collectors.toSet());
@@ -66,7 +67,7 @@ public class BookResponse extends ResourceSupport {
     private void addDownloadLink(Long id) {
 
         try {
-            add(linkTo(methodOn(BookController.class, id).downloadBook(id)).withRel("download"));
+            add(linkTo(methodOn(FileController.class, id).downloadBook(id)).withRel("download"));
         } catch (IOException e) {
             e.printStackTrace();
         }

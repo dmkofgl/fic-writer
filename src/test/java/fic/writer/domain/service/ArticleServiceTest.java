@@ -1,19 +1,21 @@
 package fic.writer.domain.service;
 
 import fic.writer.domain.entity.Article;
-import fic.writer.domain.entity.User;
+import fic.writer.domain.entity.Profile;
 import fic.writer.domain.entity.dto.ArticleDto;
-import fic.writer.web.config.security.authorization.CustomUserDetails;
+import fic.writer.web.config.security.authorization.EmbeddedProfileDetails;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -25,9 +27,25 @@ public class ArticleServiceTest {
 
     @Before
     public void setUserInSecurityContext() {
-        CustomUserDetails customUserDetails = new CustomUserDetails(User.builder().id(1L).build(), "qwerty");
-        TestingAuthenticationToken token = new TestingAuthenticationToken(customUserDetails, null);
+        final String PASSWORD = "qwerty";
+        Profile profile = Profile.builder().id(1L).build();
+        EmbeddedProfileDetails embeddedProfileDetails = new EmbeddedProfileDetails(profile, PASSWORD);
+        TestingAuthenticationToken token = new TestingAuthenticationToken(embeddedProfileDetails, null);
         SecurityContextHolder.getContext().setAuthentication(token);
+    }
+
+    @Test
+    public void findAllArticlesForBook_whenBookExistAndContainsArticles_shouldFindSomeArticles() {
+        final Long BOOK_ID = 33L;
+        List<Article> articles = articleService.findAllArticlesForBook(BOOK_ID);
+        assertNotEquals(0, articles.size());
+    }
+
+    @Test
+    public void findAllArticlesForBook_whenBookDoesNotExist_shouldNotFoundAnyArticle() {
+        final Long BOOK_ID = -1L;
+        List<Article> articles = articleService.findAllArticlesForBook(BOOK_ID);
+        assertEquals(0, articles.size());
     }
 
     @Test
@@ -35,7 +53,9 @@ public class ArticleServiceTest {
         final Long ARTICLE_ID = 3L;
         final String NEW_TITLE = "new title";
 
-        ArticleDto articleDto = ArticleDto.builder().title(NEW_TITLE).build();
+        ArticleDto articleDto = ArticleDto.builder()
+                .title(NEW_TITLE)
+                .build();
         articleService.update(ARTICLE_ID, articleDto);
         Article article = articleService.findById(ARTICLE_ID).get();
         assertEquals(NEW_TITLE, article.getTitle());
@@ -47,7 +67,9 @@ public class ArticleServiceTest {
         final String NEW_TITLE = "new title";
         Date prevUpdateDate = articleService.findById(ARTICLE_ID).get().getLastModify();
 
-        ArticleDto articleDto = ArticleDto.builder().title(NEW_TITLE).build();
+        ArticleDto articleDto = ArticleDto.builder()
+                .title(NEW_TITLE)
+                .build();
         articleService.update(ARTICLE_ID, articleDto);
         Article article = articleService.findById(ARTICLE_ID).get();
         assertNotEquals(prevUpdateDate, article.getLastModify());
@@ -58,6 +80,12 @@ public class ArticleServiceTest {
         final Long ARTICLE_ID = 333L;
         articleService.deleteById(ARTICLE_ID);
         assertFalse(articleService.findById(ARTICLE_ID).isPresent());
+    }
+
+    @Test(expected = EmptyResultDataAccessException.class)
+    public void deleteArticle_whenNotExist_shouldNotFoundById() {
+        final Long ARTICLE_ID = -1L;
+        articleService.deleteById(ARTICLE_ID);
     }
 
 }

@@ -1,6 +1,6 @@
 package fic.writer.domain.entity.auth;
 
-import fic.writer.domain.entity.User;
+import fic.writer.domain.entity.Profile;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,12 +12,12 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OauthUser {
+public class OauthUserDetails {
     @Id
     @GeneratedValue
     private Long id;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private User profile;
+    private Profile profile;
     private String token;
     private Date expireDate;
 }

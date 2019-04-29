@@ -16,9 +16,11 @@ public interface BookService {
 
     Page<Book> findPage(Pageable pageable);
 
-    Optional<Book> findById(Long aLong);
+    Optional<Book> findById(Long bookId);
 
     Book create(BookDto bookDto);
+
+    Book save(Book book);
 
     Book update(Long id, BookDto bookDto);
 
@@ -28,7 +30,7 @@ public interface BookService {
 
     void delete(Book book);
 
-    void deleteById(Long aLong);
+    void deleteById(Long bookId);
 
     byte[] getBookAsByteArray(Long bookId) throws IOException;
 }

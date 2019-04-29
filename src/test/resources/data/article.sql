@@ -10,3 +10,5 @@ INSERT INTO article(id,annotation,content,title,book_id)VALUES(6,'Place for anno
 INSERT INTO article(id,annotation,content,title,book_id)VALUES(7,'Place for annotation','<p>Place for content.<p>','Summer #3',335);
 INSERT INTO article(id,annotation,content,title,book_id)VALUES(8,'Place for annotation','<p>Place for content.<p>','Winrte',335);
 
+INSERT INTO article(id,annotation,content,title,book_id)VALUES(9,'Place for annotation','<p>Place for content.<p>','Summer #3',33);
+INSERT INTO article(id,annotation,content,title,book_id)VALUES(10,'Place for annotation','<p>Place for content.<p>','Winrte',33);

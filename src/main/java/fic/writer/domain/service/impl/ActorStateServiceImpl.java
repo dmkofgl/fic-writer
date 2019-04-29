@@ -2,8 +2,6 @@ package fic.writer.domain.service.impl;
 
 import fic.writer.domain.entity.ActorState;
 import fic.writer.domain.entity.ActorStateId;
-import fic.writer.domain.entity.dto.ActorStateDto;
-import fic.writer.domain.repository.ActorRepository;
 import fic.writer.domain.repository.ActorStateRepository;
 import fic.writer.domain.service.ActorStateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,6 @@ import java.util.Optional;
 @Service
 public class ActorStateServiceImpl implements ActorStateService {
     private ActorStateRepository actorStateRepository;
-    private ActorRepository actorRepository;
 
     @Autowired
     public ActorStateServiceImpl(ActorStateRepository actorStateRepository) {
@@ -28,7 +25,6 @@ public class ActorStateServiceImpl implements ActorStateService {
     public List<ActorState> findAll() {
         return actorStateRepository.findAll();
     }
-
 
     @Override
     public Page<ActorState> findPage(Pageable pageable) {
@@ -41,16 +37,6 @@ public class ActorStateServiceImpl implements ActorStateService {
     }
 
     @Override
-    public void delete(ActorState actorState) {
-        actorStateRepository.delete(actorState);
-    }
-
-    @Override
-    public void deleteById(ActorStateId id) {
-        actorStateRepository.deleteById(id);
-    }
-
-    @Override
     public Page<ActorState> findAllByActor(Long id, Pageable pageable) {
         return actorStateRepository.findAllByIdActorId(id, pageable);
     }
@@ -60,11 +46,13 @@ public class ActorStateServiceImpl implements ActorStateService {
         return actorStateRepository.findAByIdActorIdAndIdArticleId(actorId, articleId);
     }
 
-    private ActorState actorStateDtoForActorState(ActorStateDto actorState) {
-        return ActorState.builder()
-                .id(actorState.getId())
-                .title(actorState.getTitle())
-                .content(actorState.getContent())
-                .build();
+    @Override
+    public void delete(ActorState actorState) {
+        actorStateRepository.delete(actorState);
+    }
+
+    @Override
+    public void deleteById(ActorStateId id) {
+        actorStateRepository.deleteById(id);
     }
 }

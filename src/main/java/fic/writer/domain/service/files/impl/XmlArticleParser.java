@@ -1,5 +1,6 @@
 package fic.writer.domain.service.files.impl;
 
+import fic.writer.domain.entity.Article;
 import fic.writer.domain.service.files.ArticleParser;
 import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
@@ -14,6 +15,15 @@ import java.io.IOException;
 public class XmlArticleParser implements ArticleParser {
     private Element element;
 
+    @Override
+    public Article parse() {
+        return Article.builder()
+                .title(this.getTitle())
+                .annotation(this.getAnnotation())
+                .content(this.getContent())
+                .build();
+    }
+
     public XmlArticleParser(MultipartFile multipartFile) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
@@ -21,37 +31,29 @@ public class XmlArticleParser implements ArticleParser {
         try {
             dBuilder = dbFactory.newDocumentBuilder();
             doc = dBuilder.parse(multipartFile.getInputStream());
-        } catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
-            throw new RuntimeException();
-        } catch (SAXException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e.getMessage());
         }
         doc.getDocumentElement().normalize();
         element = doc.getDocumentElement();
-        String title = element.getElementsByTagName("book-title").item(0).getFirstChild().getNodeValue();
-        String annotation = element.getElementsByTagName("annotation").item(0).getFirstChild().getNodeValue();
     }
+
 
     @Override
     public String getTitle() {
-        String title = element.getElementsByTagName("title").item(0).getFirstChild().getNodeValue();
-        return title;
+        return element.getElementsByTagName("title").item(0).getFirstChild().getNodeValue();
     }
 
     @Override
     public String getAnnotation() {
-        String annotation = element.getElementsByTagName("annotation").item(0).getFirstChild().getNodeValue();
-        return null;
+        return element.getElementsByTagName("annotation").item(0).getFirstChild().getNodeValue();
     }
 
     @Override
     public String getContent() {
-        String annotation = element.getElementsByTagName("section").item(0).getFirstChild().getNodeValue();
-        return null;
+        return element.getElementsByTagName("section").item(0).getFirstChild().getNodeValue();
     }
+
+
 }

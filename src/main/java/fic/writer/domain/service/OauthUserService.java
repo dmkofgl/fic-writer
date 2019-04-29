@@ -1,6 +1,6 @@
 package fic.writer.domain.service;
 
-import fic.writer.domain.entity.auth.OauthUser;
+import fic.writer.domain.entity.auth.OauthUserDetails;
 
-public interface OauthUserService extends CrudService<OauthUser, Long> {
+public interface OauthUserService extends CrudService<OauthUserDetails, Long> {
 }

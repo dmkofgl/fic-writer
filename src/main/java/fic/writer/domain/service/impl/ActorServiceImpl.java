@@ -4,6 +4,7 @@ import fic.writer.domain.entity.Actor;
 import fic.writer.domain.entity.dto.ActorDto;
 import fic.writer.domain.repository.ActorRepository;
 import fic.writer.domain.service.ActorService;
+import fic.writer.domain.service.helper.ActorFlusher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,27 +39,22 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public Actor update(Long id, ActorDto actorDto) {
-        Actor actor = actorRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        flushArticleDtoToArticle(actor, actorDto);
-        return actorRepository.save(actor);
-    }
-
-    private void flushArticleDtoToArticle(Actor actor, ActorDto actorDto) {
-        if (actorDto.getName() != null) {
-            actor.setName(actorDto.getName());
-        }
-        if (actorDto.getActorStates() != null) {
-            actor.setActorStates(actorDto.getActorStates());
-        }
-        if (actorDto.getDescription() != null) {
-            actor.setDescription(actorDto.getDescription());
-        }
+    public Actor getOne(Long id) {
+        return actorRepository.getOne(id);
     }
 
     @Override
-    public Actor getOne(Long id) {
-        return actorRepository.getOne(id);
+    public Actor create(ActorDto actorDto) {
+        Actor actor = Actor.builder().build();
+        ActorFlusher.flushArticleDtoToArticle(actor, actorDto);
+        return actorRepository.save(actor);
+    }
+
+    @Override
+    public Actor update(Long id, ActorDto actorDto) {
+        Actor actor = actorRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        ActorFlusher.flushArticleDtoToArticle(actor, actorDto);
+        return actorRepository.save(actor);
     }
 
     @Override
@@ -66,10 +62,4 @@ public class ActorServiceImpl implements ActorService {
         actorRepository.deleteById(id);
     }
 
-    @Override
-    public Actor create(ActorDto actorDto) {
-        Actor actor = Actor.builder().build();
-        flushArticleDtoToArticle(actor, actorDto);
-        return actorRepository.save(actor);
-    }
 }

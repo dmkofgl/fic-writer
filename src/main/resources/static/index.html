@@ -19,7 +19,7 @@
     With github: <a href="/login/github">click here</a>
 </div>
 <div class="container authenticated" style="display: none">
-    Logged in as: <span id="user"></span>
+    Logged in as: <span id="profile"></span>
     <div>
         <button onClick="logout()" class="btn btn-primary">Logout</button>
     </div>
@@ -41,14 +41,14 @@
                   }
                 }
               });
-          $.get("/user", function(data) {
-            $("#user").html(data.userAuthentication.details.name);
+          $.get("/profile", function(data) {
+            $("#profile").html(data.userAuthentication.details.name);
             $(".unauthenticated").hide();
             $(".authenticated").show();
           });
           var logout = function() {
             $.post("/logout", function() {
-              $("#user").html('');
+              $("#profile").html('');
               $(".unauthenticated").show();
               $(".authenticated").hide();
             })

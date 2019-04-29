@@ -1,6 +1,6 @@
 package fic.writer.web.config.security.authorization;
 
-import fic.writer.domain.entity.User;
+import fic.writer.domain.entity.Profile;
 import lombok.Getter;
 import org.assertj.core.util.Lists;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,13 +9,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-public class CustomUserDetails implements UserDetails {
+public class EmbeddedProfileDetails implements UserDetails {
     @Getter
-    private User user;
+    private Profile profile;
     private String password;
 
-    public CustomUserDetails(User user, String password) {
-        this.user = user;
+    public EmbeddedProfileDetails(Profile profile, String password) {
+        this.profile = profile;
         this.password = password;
     }
 
@@ -31,7 +31,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return profile.getEmail();
     }
 
     @Override

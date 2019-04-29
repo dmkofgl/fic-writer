@@ -1,6 +1,6 @@
 package fic.writer.domain.service.impl;
 
-import fic.writer.domain.entity.auth.OauthUser;
+import fic.writer.domain.entity.auth.OauthUserDetails;
 import fic.writer.domain.repository.OauthUserRepository;
 import fic.writer.domain.service.OauthUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,28 +17,28 @@ public class OauthUserServiceImpl implements OauthUserService {
     private OauthUserRepository oauthUserRepository;
 
     @Override
-    public List<OauthUser> findAll() {
+    public List<OauthUserDetails> findAll() {
         return oauthUserRepository.findAll();
     }
 
     @Override
-    public Page<OauthUser> findPage(Pageable pageable) {
+    public Page<OauthUserDetails> findPage(Pageable pageable) {
         return null;
     }
 
     @Override
-    public Optional<OauthUser> findById(Long id) {
+    public Optional<OauthUserDetails> findById(Long id) {
         return oauthUserRepository.findById(id);
     }
 
     @Override
-    public OauthUser save(OauthUser oauthUser) {
-        return oauthUserRepository.save(oauthUser);
+    public OauthUserDetails save(OauthUserDetails oauthUserDetails) {
+        return oauthUserRepository.save(oauthUserDetails);
     }
 
     @Override
-    public void delete(OauthUser oauthUser) {
-        oauthUserRepository.delete(oauthUser);
+    public void delete(OauthUserDetails oauthUserDetails) {
+        oauthUserRepository.delete(oauthUserDetails);
     }
 
     @Override

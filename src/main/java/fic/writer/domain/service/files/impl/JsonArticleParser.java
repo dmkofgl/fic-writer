@@ -37,4 +37,5 @@ public class JsonArticleParser implements ArticleParser {
     public String getContent() {
         return jsonObject.path("content").textValue();
     }
+
 }

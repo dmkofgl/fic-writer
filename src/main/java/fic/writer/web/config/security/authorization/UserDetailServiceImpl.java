@@ -1,9 +1,9 @@
 package fic.writer.web.config.security.authorization;
 
-import fic.writer.domain.entity.User;
-import fic.writer.domain.entity.auth.CustomUser;
-import fic.writer.domain.repository.CustomUserRepository;
-import fic.writer.domain.repository.UserRepository;
+import fic.writer.domain.entity.Profile;
+import fic.writer.domain.entity.auth.EmbeddedUserDetails;
+import fic.writer.domain.repository.EmbeddedUserDetailsRepository;
+import fic.writer.domain.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,23 +16,24 @@ import javax.transaction.Transactional;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CustomUserRepository customUserRepository;
-    @Autowired
+    private ProfileRepository profileRepository;
+    private EmbeddedUserDetailsRepository embeddedUserDetailsRepository;
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserDetailServiceImpl(ProfileRepository profileRepository, EmbeddedUserDetailsRepository embeddedUserDetailsRepository, PasswordEncoder passwordEncoder) {
+        this.profileRepository = profileRepository;
+        this.embeddedUserDetailsRepository = embeddedUserDetailsRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username).orElseThrow(() -> new BadCredentialsException("username: " + username + " not found"));
-        CustomUser customUser = customUserRepository.findByProfileId(user.getId()).orElseThrow(() -> new BadCredentialsException("username: " + user.getEmail() + " not found"));
+        Profile profile = profileRepository.findByEmail(username).orElseThrow(() -> new BadCredentialsException("username: " + username + " not found"));
+        EmbeddedUserDetails embeddedUserDetails = embeddedUserDetailsRepository.findByProfileId(profile.getId()).orElseThrow(() -> new BadCredentialsException("username: " + profile.getEmail() + " not found"));
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(user, passwordEncoder.encode(customUser.getPassword()));
-
-        return customUserDetails;
-
+        return new EmbeddedProfileDetails(profile, passwordEncoder.encode(embeddedUserDetails.getPassword()));
     }
 
 }

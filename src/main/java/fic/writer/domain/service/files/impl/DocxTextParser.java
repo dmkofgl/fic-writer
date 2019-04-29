@@ -13,16 +13,16 @@ public class DocxTextParser implements TextParser {
 
     @Override
     public String parseFile(MultipartFile file) {
-        String fileContent = "";
+        StringBuilder fileContent = new StringBuilder();
         try {
             XWPFDocument document = new XWPFDocument(file.getInputStream());
             List<XWPFParagraph> paragraphs = document.getParagraphs();
             for (int i = 0; i < paragraphs.size(); i++) {
-                fileContent += paragraphs.get(i).getParagraphText();
+                fileContent.append(paragraphs.get(i).getParagraphText());
             }
         } catch (IOException e) {
             throw new RuntimeException();
         }
-        return fileContent;
+        return fileContent.toString();
     }
 }

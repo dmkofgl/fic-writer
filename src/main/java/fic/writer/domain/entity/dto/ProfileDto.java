@@ -1,6 +1,6 @@
 package fic.writer.domain.entity.dto;
 
-import fic.writer.domain.entity.User;
+import fic.writer.domain.entity.Profile;
 import lombok.*;
 
 @Builder
@@ -8,16 +8,16 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class ProfileDto {
     private String username;
     private String about;
     private String information;
 
-    public static UserDto of(User user) {
+    public static ProfileDto of(Profile profile) {
         return builder()
-                .username(user.getUsername())
-                .about(user.getAbout())
-                .information(user.getInformation())
+                .username(profile.getUsername())
+                .about(profile.getAbout())
+                .information(profile.getInformation())
                 .build();
     }
 }

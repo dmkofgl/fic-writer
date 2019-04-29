@@ -1,6 +1,6 @@
 package fic.writer.web.response;
 
-import fic.writer.domain.entity.User;
+import fic.writer.domain.entity.Profile;
 import fic.writer.web.controller.UserController;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,13 +29,13 @@ public class UserResponse extends ResourceSupport {
     private Set<BookResponse> booksAsSubAuthor;
     private Set<BookResponse> booksAsAuthor;
 
-    public UserResponse(User user) {
-        this.userId = user.getId();
-        username = user.getUsername();
-        about = user.getAbout();
-        information = user.getInformation();
-        booksAsSubAuthor = user.getBooksAsSubAuthor().stream().map(BookResponse::new).collect(Collectors.toSet());
-        booksAsAuthor = user.getBooksAsAuthor().stream().map(BookResponse::new).collect(Collectors.toSet());
+    public UserResponse(Profile profile) {
+        this.userId = profile.getId();
+        username = profile.getUsername();
+        about = profile.getAbout();
+        information = profile.getInformation();
+        booksAsSubAuthor = profile.getBooksAsCoauthor().stream().map(BookResponse::new).collect(Collectors.toSet());
+        booksAsAuthor = profile.getBooksAsAuthor().stream().map(BookResponse::new).collect(Collectors.toSet());
         addSelfLink(userId);
     }
 

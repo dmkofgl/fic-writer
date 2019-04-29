@@ -13,5 +13,5 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         hbm2ddl:
           import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
-          import_files: data/user.sql, data/actor.sql, data/book.sql, data/article.sql,data/book_article.sql, data/actor_state.sql
+          import_files: data/getLoggedProfile.sql, data/actor.sql, data/book.sql, data/article.sql,data/book_article.sql, data/actor_state.sql
 

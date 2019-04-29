@@ -23,14 +23,14 @@ public class Book {
     private String title;
     @ManyToOne
     @CreatedBy
-    private User author;
+    private Profile author;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "book_subauthors",
             joinColumns = {@JoinColumn(name = "book_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
-    @Singular("subAuthors")
-    private Set<User> subAuthors;
+    @Singular("coauthors")
+    private Set<Profile> coauthors;
     @OneToMany(fetch = FetchType.EAGER)
     @Singular("source")
     private Set<Book> source;
@@ -64,13 +64,6 @@ public class Book {
         this.pageCount = 0L;
         if (articles != null) {
             pageCount = articles.stream().mapToLong(Article::getPageCount).sum();
-        }
-    }
-
-    @PostPersist
-    private void updateAuthor() {
-        if (author != null) {
-
         }
     }
 

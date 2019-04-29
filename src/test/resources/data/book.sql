@@ -11,5 +11,8 @@ INSERT INTO user_books_as_author (user_id,books_as_author_id)VALUES(3,335);
 INSERT INTO book_subauthors (user_id,book_id)VALUES(4,335);
 
 
+INSERT INTO book(id,title)VALUES(33,'Книга');
+
+
 
 

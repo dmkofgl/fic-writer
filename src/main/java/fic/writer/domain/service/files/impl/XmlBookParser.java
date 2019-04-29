@@ -1,7 +1,7 @@
 package fic.writer.domain.service.files.impl;
 
 import fic.writer.domain.entity.Article;
-import fic.writer.domain.entity.User;
+import fic.writer.domain.entity.Profile;
 import fic.writer.domain.entity.enums.State;
 import fic.writer.domain.service.files.BookParser;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,116 +16,127 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.*;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
 public class XmlBookParser implements BookParser {
-    private Document doc;
+    private Document xmlDocument;
     private XPath xPath;
+
+    {
+        xPath = XPathFactory.newInstance().newXPath();
+    }
 
     public XmlBookParser(MultipartFile file) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
         try {
             dBuilder = dbFactory.newDocumentBuilder();
-            doc = dBuilder.parse(file.getInputStream());
-        } catch (ParserConfigurationException e) {
+            xmlDocument = dBuilder.parse(file.getInputStream());
+        } catch (ParserConfigurationException
+                | SAXException
+                | IOException e) {
             e.printStackTrace();
-            throw new RuntimeException();
-        } catch (SAXException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e.getMessage());
         }
 
-        xPath = XPathFactory.newInstance().newXPath();
-
-        doc.getDocumentElement().normalize();
+        xmlDocument.getDocumentElement().normalize();
     }
+
 
     @Override
     public String getTitle() {
+        final String BOOK_TITLE_PATH = "//FictionBook/description/title-info/book-title";
         String title = "";
         try {
-            XPathExpression expr = xPath.compile("//FictionBook/description/title-info/book-title");
-            title = (String) expr.evaluate(doc, XPathConstants.STRING);
+            XPathExpression expr = xPath.compile(BOOK_TITLE_PATH);
+            title = (String) expr.evaluate(xmlDocument, XPathConstants.STRING);
         } catch (XPathExpressionException e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
-        title = title.replaceAll("(\\s)\\1", "$1");
-        return title;
-    }
-
-    @Override
-    public Set<User> getCoAuthors() {
-        return new HashSet<>();
+        return trimAndNormalizeSpace(title);
     }
 
     @Override
     public String getDescription() {
+        final String BOOK_DESCRIPTION_PATH = "//FictionBook/description/title-info/annotation";
         String description = "";
         try {
-            XPathExpression expr = xPath.compile("//FictionBook/description/title-info/annotation");
-            description = (String) expr.evaluate(doc, XPathConstants.STRING);
+            XPathExpression expr = xPath.compile(BOOK_DESCRIPTION_PATH);
+            description = (String) expr.evaluate(xmlDocument, XPathConstants.STRING);
         } catch (XPathExpressionException e) {
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e.getMessage());
         }
-        description = description.trim().replaceAll("(\\s)\\1", "$1");
-        return description;
+
+        return trimAndNormalizeSpace(description);
+    }
+
+    @Override
+    public Set<Profile> getCoauthors() {
+        throw new UnsupportedOperationException("fb2 doesn't contain this field");
     }
 
     @Override
     public State getState() {
-        return null;
+        throw new UnsupportedOperationException("fb2 doesn't contain this field");
     }
 
     @Override
     public Set<Article> getArticles() {
+        final String ARTICLE_CONTAINER_PATH = "//body";
+        final String ARTICLE_ELEMENT_NAME = "section";
+        final String TITLE_ELEMENT_NAME = "title";
+        final String ANNOTATION_ELEMENT_NAME = "annotation";
+        final String CONTENT_TAG_NAME = "p";
         Set<Article> articles = new LinkedHashSet<>();
+        Element bodyElement;
         try {
-            XPathExpression sectionExpression = xPath.compile("//body");
-            Element bodyElements = (Element) sectionExpression.evaluate(doc, XPathConstants.NODE);
-            NodeList articlesNode = bodyElements.getElementsByTagName("section");
-            for (int i = 0; i < articlesNode.getLength(); i++) {
-                Element node = (Element) articlesNode.item(i);
-                Optional<Node> titleNode = getNode(node, "title", 0);
-                String title = titleNode.map(Node::getTextContent)
-                        .orElse("");
-                title = title.trim().replaceAll("(\\s)\\1", "$1");
-
-                Optional<Node> annotationNode = getNode(node, "annotation", 0);
-                String annotation = annotationNode.map(Node::getTextContent)
-                        .orElse("");
-                annotation = annotation.trim().replaceAll("(\\s)\\1", "$1");
-                StringBuilder content = new StringBuilder();
-                NodeList nodeList = node.getElementsByTagName("p");
-                for (int j = 0; j < nodeList.getLength(); j++) {
-                    if (nodeList.item(j).getParentNode().getNodeName() == "section") {
-                        content.append("\n" + nodeList.item(j).getTextContent() + "\n");
-                    }
-                }
-                articles.add(Article.builder()
-                        .title(title)
-                        .annotation(annotation)
-                        .content(content.toString())
-                        .build());
-            }
-
+            XPathExpression sectionPathExpression = xPath.compile(ARTICLE_CONTAINER_PATH);
+            bodyElement = (Element) sectionPathExpression.evaluate(xmlDocument, XPathConstants.NODE);
         } catch (XPathExpressionException e) {
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e.getMessage());
         }
+        NodeList articleNodes = bodyElement.getElementsByTagName(ARTICLE_ELEMENT_NAME);
+        for (int i = 0; i < articleNodes.getLength(); i++) {
+            Element articleElement = (Element) articleNodes.item(i);
+
+            String title = getNormalizedTagContent(articleElement, TITLE_ELEMENT_NAME);
+            String annotation = getNormalizedTagContent(articleElement, ANNOTATION_ELEMENT_NAME);
+
+            StringBuilder content = new StringBuilder();
+            NodeList articleContentNodes = articleElement.getElementsByTagName(CONTENT_TAG_NAME);
+            for (int j = 0; j < articleContentNodes.getLength(); j++) {
+                if (articleContentNodes.item(j).getParentNode().getNodeName().equals(ARTICLE_ELEMENT_NAME)) {
+                    content.append("\n")
+                            .append(articleContentNodes.item(j).getTextContent())
+                            .append("\n");
+                }
+            }
+            Article article = Article.builder()
+                    .title(title)
+                    .annotation(annotation)
+                    .content(content.toString())
+                    .build();
+            articles.add(article);
+        }
+
         return articles;
     }
 
-    private Optional<Node> getNode(Element element, String tagName, int index) {
+    private String trimAndNormalizeSpace(String source) {
+        return source.trim().replaceAll("(\\s)\\1", "$1");
+    }
 
+    private String getNormalizedTagContent(Element source, String tagName) {
+        Optional<Node> annotationNode = getFirstNodeByTag(source, tagName);
+        return trimAndNormalizeSpace(annotationNode.map(Node::getTextContent).orElse(""));
+    }
+
+    private Optional<Node> getNode(Element element, String tagName, int index) {
         NodeList nodeList = element.getElementsByTagName(tagName);
         Optional<Node> result;
 
@@ -133,6 +144,9 @@ public class XmlBookParser implements BookParser {
                 ? Optional.of(nodeList.item(index))
                 : Optional.empty();
         return result;
+    }
 
+    private Optional<Node> getFirstNodeByTag(Element element, String tagName) {
+        return getNode(element, tagName, 0);
     }
 }

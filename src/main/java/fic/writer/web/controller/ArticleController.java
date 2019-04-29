@@ -27,13 +27,13 @@ public class ArticleController {
 
     @GetMapping
     public List<ArticleResponse> getAllArticles(@PathVariable(BOOK_ID_TEMPLATE) Long bookId) {
-        List<ArticleResponse> list = articleService.findAllForBook(bookId).stream().map(ArticleResponse::new).collect(Collectors.toList());
+        List<ArticleResponse> list = articleService.findAllArticlesForBook(bookId).stream().map(ArticleResponse::new).collect(Collectors.toList());
         return list;
     }
 
     @GetMapping(ID_TEMPLATE_PATH)
     public ArticleResponse getOneArticle(@PathVariable(BOOK_ID_TEMPLATE) Long bookId, @PathVariable(ID_TEMPLATE) Long articleId) {
-        return articleService.findAllForBook(bookId).stream().
+        return articleService.findAllArticlesForBook(bookId).stream().
                 filter(article -> article.getId().equals(articleId))
                 .map(ArticleResponse::new)
                 .findFirst()
