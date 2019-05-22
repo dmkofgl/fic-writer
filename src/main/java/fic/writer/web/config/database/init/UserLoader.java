@@ -1,36 +1,41 @@
 package fic.writer.web.config.database.init;
 
 import fic.writer.domain.entity.Profile;
-import fic.writer.domain.entity.auth.EmbeddedUserDetails;
-import fic.writer.domain.repository.EmbeddedUserDetailsRepository;
+import fic.writer.domain.entity.auth.AuthProvider;
+import fic.writer.domain.entity.auth.OauthProfileDetails;
+import fic.writer.domain.repository.OauthProfileDetailsRepository;
 import fic.writer.domain.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserLoader implements ApplicationRunner {
     @Autowired
-    ProfileRepository profileRepository;
+    private ProfileRepository profileRepository;
     @Autowired
-    EmbeddedUserDetailsRepository embeddedUserDetailsRepository;
+    private OauthProfileDetailsRepository detailsRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Profile profile = Profile.builder()
                 .id(1L)
                 .information("first profile information")
-                .username("profile@mail.cc")
+                .username("firstUser")
                 .email("firstUser@mail.com")
                 .build();
         profileRepository.save(profile);
-        EmbeddedUserDetails embeddedUserDetails = EmbeddedUserDetails.builder()
+        OauthProfileDetails ownProfileDetails = OauthProfileDetails.builder()
                 .id(1L)
-                .password("qwerty")
+                .password(passwordEncoder.encode("qwerty"))
                 .profile(profile)
+                .provider(AuthProvider.LOCAL)
                 .build();
-        embeddedUserDetailsRepository.save(embeddedUserDetails);
+        detailsRepository.save(ownProfileDetails);
 
 
     }

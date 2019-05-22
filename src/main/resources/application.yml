@@ -2,12 +2,12 @@ spring:
   main:
     allow-bean-definition-overriding: true
   profiles:
-    active: db-postgresql, oauth-github, oauth-acme
+    active: db-postgresql,oauth2-config
   servlet:
     multipart:
       max-file-size: 5MB
       max-request-size: 5MB
-      location: ${getLoggedProfile.dir}/files/temp
+      location: ${user.dir}/files/temp
 logging:
   level:
     org:

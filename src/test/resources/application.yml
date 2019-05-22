@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: db-mysql, oauth-github, oauth-react-client
+    active: db-mysql,oauth2-config
   main:
     allow-bean-definition-overriding: true
   jpa:
@@ -14,3 +14,13 @@ logging:
   level:
     org:
       springframework: INFO
+
+security:
+  oauth2:
+    client:
+      client-id: acme
+      client-secret: acmesecret
+      scope: read,write
+      auto-approve-scopes: '.*'
+server:
+  port: 8082

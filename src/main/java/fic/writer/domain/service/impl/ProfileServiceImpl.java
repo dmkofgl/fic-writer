@@ -5,7 +5,7 @@ import fic.writer.domain.entity.Profile;
 import fic.writer.domain.entity.dto.ProfileDto;
 import fic.writer.domain.repository.ProfileRepository;
 import fic.writer.domain.service.ProfileService;
-import fic.writer.domain.service.helper.ProfileFlusher;
+import fic.writer.domain.service.helper.flusher.ProfileFlusher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,12 +19,8 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ProfileServiceImpl implements ProfileService {
-    private ProfileRepository profileRepository;
-
     @Autowired
-    public ProfileServiceImpl(ProfileRepository profileRepository) {
-        this.profileRepository = profileRepository;
-    }
+    private ProfileRepository profileRepository;
 
     @Override
     public List<Profile> findAll() {
@@ -53,17 +49,8 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Profile create(ProfileDto profileDto) {
-        Profile profile = Profile.builder().build();
-        ProfileFlusher.flushProfileDtoToProfile(profile, profileDto);
+        Profile profile = ProfileFlusher.convertProfileDtoToProfile(profileDto);
         return profileRepository.save(profile);
-    }
-
-    @Override
-    public Profile addBookAsAuthor(Long userId, Long bookId) {
-        Profile profile = profileRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
-        Book book = Book.builder().id(bookId).build();
-        profile.getBooksAsAuthor().add(book);
-        return profile;
     }
 
     @Override
@@ -87,6 +74,30 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public void deleteById(Long id) {
         profileRepository.deleteById(id);
+    }
+
+    @Override
+    public Profile addBookAsAuthor(Long userId, Long bookId) {
+        Profile profile = profileRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        Book book = Book.builder().id(bookId).build();
+        profile.getBooksAsAuthor().add(book);
+        return profile;
+    }
+
+    @Override
+    public Optional<Profile> findByUsernameOrEmail(String usernameOrEmail) {
+        Optional<Profile> profile;
+        if (isEmail(usernameOrEmail)) {
+            profile = findByEmail(usernameOrEmail);
+        } else {
+            profile = findByUsername(usernameOrEmail);
+        }
+        return profile;
+    }
+
+    private boolean isEmail(String source) {
+        final String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+        return source.matches(emailRegex);
     }
 
 

@@ -1,20 +1,22 @@
 package fic.writer.web.controller;
 
+import fic.writer.domain.entity.Article;
 import fic.writer.domain.entity.dto.ArticleDto;
 import fic.writer.domain.service.ArticleService;
 import fic.writer.domain.service.BookService;
-import fic.writer.web.response.ArticleResponse;
+import fic.writer.web.controller.response.ArticleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/books/{bookId}/articles", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/books/{bookId}/articles", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ArticleController {
     private static final String ID_TEMPLATE_PATH = "/{articleId}";
     private static final String ID_TEMPLATE = "articleId";
@@ -27,13 +29,17 @@ public class ArticleController {
 
     @GetMapping
     public List<ArticleResponse> getAllArticles(@PathVariable(BOOK_ID_TEMPLATE) Long bookId) {
-        List<ArticleResponse> list = articleService.findAllArticlesForBook(bookId).stream().map(ArticleResponse::new).collect(Collectors.toList());
+        List<ArticleResponse> list = bookService.findById(bookId).get()
+                .getArticles().stream()
+                .sorted(Comparator.comparingLong(Article::getId))
+                .map(ArticleResponse::new)
+                .collect(Collectors.toList()); //articleService.findAllArticlesForBook(bookId).stream().map(ArticleResponse::new).collect(Collectors.toList());
         return list;
     }
 
     @GetMapping(ID_TEMPLATE_PATH)
     public ArticleResponse getOneArticle(@PathVariable(BOOK_ID_TEMPLATE) Long bookId, @PathVariable(ID_TEMPLATE) Long articleId) {
-        return articleService.findAllArticlesForBook(bookId).stream().
+        return bookService.findById(bookId).get().getArticles().stream().
                 filter(article -> article.getId().equals(articleId))
                 .map(ArticleResponse::new)
                 .findFirst()

@@ -30,4 +30,6 @@ public interface ProfileService {
     void delete(Profile profile);
 
     void deleteById(Long aLong);
+
+    Optional<Profile> findByUsernameOrEmail(String usernameOrEmail);
 }

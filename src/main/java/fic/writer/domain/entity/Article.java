@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -20,7 +19,7 @@ import java.util.Set;
 public class Article {
     private static final int CHARS_IN_PAGE = 1800;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     @CreatedDate
@@ -32,8 +31,6 @@ public class Article {
     private String annotation;
     @ManyToOne(fetch = FetchType.LAZY)
     private Book book;
-    @OneToMany(cascade = CascadeType.REMOVE)
-    private Set<ActorState> actorStates;
     @Formula("ceil( CHAR_LENGTH(content)/" + CHARS_IN_PAGE + ")")
     private long pageCount;
 

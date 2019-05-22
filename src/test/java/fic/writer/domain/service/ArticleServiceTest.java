@@ -1,21 +1,15 @@
 package fic.writer.domain.service;
 
 import fic.writer.domain.entity.Article;
-import fic.writer.domain.entity.Profile;
 import fic.writer.domain.entity.dto.ArticleDto;
-import fic.writer.web.config.security.authorization.EmbeddedProfileDetails;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -24,29 +18,6 @@ import static org.junit.Assert.*;
 public class ArticleServiceTest {
     @Autowired
     private ArticleService articleService;
-
-    @Before
-    public void setUserInSecurityContext() {
-        final String PASSWORD = "qwerty";
-        Profile profile = Profile.builder().id(1L).build();
-        EmbeddedProfileDetails embeddedProfileDetails = new EmbeddedProfileDetails(profile, PASSWORD);
-        TestingAuthenticationToken token = new TestingAuthenticationToken(embeddedProfileDetails, null);
-        SecurityContextHolder.getContext().setAuthentication(token);
-    }
-
-    @Test
-    public void findAllArticlesForBook_whenBookExistAndContainsArticles_shouldFindSomeArticles() {
-        final Long BOOK_ID = 33L;
-        List<Article> articles = articleService.findAllArticlesForBook(BOOK_ID);
-        assertNotEquals(0, articles.size());
-    }
-
-    @Test
-    public void findAllArticlesForBook_whenBookDoesNotExist_shouldNotFoundAnyArticle() {
-        final Long BOOK_ID = -1L;
-        List<Article> articles = articleService.findAllArticlesForBook(BOOK_ID);
-        assertEquals(0, articles.size());
-    }
 
     @Test
     public void updateArticle_whenUpdateTitle_shouldChangeTitle() {

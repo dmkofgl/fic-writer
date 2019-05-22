@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -23,7 +24,9 @@ public class Book {
     private String title;
     @ManyToOne
     @CreatedBy
+    @NotNull
     private Profile author;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "book_subauthors",
             joinColumns = {@JoinColumn(name = "book_id")},
@@ -31,26 +34,34 @@ public class Book {
     )
     @Singular("coauthors")
     private Set<Profile> coauthors;
+
     @OneToMany(fetch = FetchType.EAGER)
     @Singular("source")
     private Set<Book> source;
+
     @Column(columnDefinition = "text")
     private String description;
+
     @Enumerated
     private Size size;
+
     @Enumerated
     private State state;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Singular("articles")
     private Set<Article> articles;
+
     @Transient
     private Long pageCount;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "book_genres",
             joinColumns = {@JoinColumn(name = "book_id")},
             inverseJoinColumns = {@JoinColumn(name = "genre_id")}
     )
     private Set<Genre> genres;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "book_actors",
             joinColumns = {@JoinColumn(name = "book_id")},

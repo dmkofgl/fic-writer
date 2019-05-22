@@ -4,7 +4,7 @@ import fic.writer.domain.entity.Actor;
 import fic.writer.domain.entity.dto.ActorDto;
 import fic.writer.domain.repository.ActorRepository;
 import fic.writer.domain.service.ActorService;
-import fic.writer.domain.service.helper.ActorFlusher;
+import fic.writer.domain.service.helper.flusher.ActorFlusher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @Service
 public class ActorServiceImpl implements ActorService {
+
     private ActorRepository actorRepository;
 
     @Autowired
@@ -45,15 +46,14 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Actor create(ActorDto actorDto) {
-        Actor actor = Actor.builder().build();
-        ActorFlusher.flushArticleDtoToArticle(actor, actorDto);
+        Actor actor = ActorFlusher.convertArticleDtoToArticle(actorDto);
         return actorRepository.save(actor);
     }
 
     @Override
     public Actor update(Long id, ActorDto actorDto) {
         Actor actor = actorRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        ActorFlusher.flushArticleDtoToArticle(actor, actorDto);
+        ActorFlusher.flushActorDtoToArticle(actor, actorDto);
         return actorRepository.save(actor);
     }
 

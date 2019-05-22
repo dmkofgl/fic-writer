@@ -4,7 +4,7 @@ import fic.writer.domain.entity.Book;
 import fic.writer.domain.entity.dto.BookDto;
 
 public interface WriterService {
-    Book createBook(BookDto bookDto);
+    Book saveBook(BookDto bookDto);
 
-    void deleteBook(Long bookId);
+    Book saveBook(Book book);
 }

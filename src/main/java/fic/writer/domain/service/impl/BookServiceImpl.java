@@ -6,9 +6,10 @@ import fic.writer.domain.entity.dto.ArticleDto;
 import fic.writer.domain.entity.dto.BookDto;
 import fic.writer.domain.repository.BookRepository;
 import fic.writer.domain.service.BookService;
-import fic.writer.domain.service.helper.ArticleFlusher;
-import fic.writer.domain.service.helper.BookFlusher;
 import fic.writer.domain.service.helper.BookStringConstructor;
+import fic.writer.domain.service.helper.BookTXTStringConstructor;
+import fic.writer.domain.service.helper.flusher.ArticleFlusher;
+import fic.writer.domain.service.helper.flusher.BookFlusher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.EntityNotFoundException;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -28,12 +28,8 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 @Transactional
 public class BookServiceImpl implements BookService {
-    private BookRepository bookRepository;
-
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
+    private BookRepository bookRepository;
 
     @Override
     public List<Book> findAll() {
@@ -52,8 +48,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book create(BookDto bookDto) {
-        Book book = Book.builder().build();
-        BookFlusher.flushBookDtoToBook(book, bookDto);
+        Book book = BookFlusher.convertBookDtoToBook(bookDto);
         Book savedBook = bookRepository.save(book);
         return savedBook;
     }
@@ -103,12 +98,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public byte[] getBookAsByteArray(Long bookId) throws IOException {
+    public byte[] getBookAsByteArray(Long bookId) {
         Book book = bookRepository.findById(bookId).orElseThrow(EntityNotFoundException::new);
-        BookStringConstructor bookStringConstructor = new BookStringConstructor();
-        String bookAsString = bookStringConstructor.convertBookToSimpleText(book);
-        return bookAsString.getBytes();
+        return convertBookToByteArray(book);
     }
 
-
+    @Override
+    public byte[] convertBookToByteArray(Book book) {
+        BookStringConstructor bookStringConstructor = new BookTXTStringConstructor();
+        String bookAsString = bookStringConstructor.convertBookToText(book);
+        return bookAsString.getBytes();
+    }
 }

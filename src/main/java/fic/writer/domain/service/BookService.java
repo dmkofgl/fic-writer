@@ -6,7 +6,6 @@ import fic.writer.domain.entity.dto.BookDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,5 +31,7 @@ public interface BookService {
 
     void deleteById(Long bookId);
 
-    byte[] getBookAsByteArray(Long bookId) throws IOException;
+    byte[] getBookAsByteArray(Long bookId);
+
+    byte[] convertBookToByteArray(Book book);
 }

@@ -20,9 +20,4 @@ public class Actor {
     private String description;
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "actors")
     private Set<Book> books;
-    @OneToMany(cascade = {CascadeType.ALL},
-            fetch = FetchType.LAZY,
-            orphanRemoval = true,
-            mappedBy = "actor")
-    private Set<ActorState> actorStates;
 }

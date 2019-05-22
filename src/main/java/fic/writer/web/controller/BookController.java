@@ -5,8 +5,8 @@ import fic.writer.domain.entity.dto.BookDto;
 import fic.writer.domain.service.BookService;
 import fic.writer.domain.service.ProfileService;
 import fic.writer.domain.service.WriterService;
-import fic.writer.web.response.BookResponse;
-import fic.writer.web.response.PageResponse;
+import fic.writer.web.controller.response.BookResponse;
+import fic.writer.web.controller.response.PageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 
 @RestController
-@RequestMapping(value = "/books", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/books", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BookController {
     private static final String ID_TEMPLATE_PATH = "/{bookId}";
     private static final String ID_TEMPLATE = "bookId";
@@ -27,11 +27,11 @@ public class BookController {
     private WriterService writerService;
 
     @Autowired
-    public BookController(BookService bookService, ProfileService profileService) {
+    public BookController(BookService bookService, ProfileService profileService, WriterService writerService) {
         this.bookService = bookService;
         this.profileService = profileService;
+        this.writerService = writerService;
     }
-
 
     @GetMapping
     public PageResponse<BookResponse> getAllBooks(Pageable pageable) {
@@ -49,7 +49,7 @@ public class BookController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookResponse createBook(@RequestBody BookDto book) {
-        Book savedBook = writerService.createBook(book);
+        Book savedBook = writerService.saveBook(book);
         return new BookResponse(savedBook);
     }
 
@@ -64,8 +64,6 @@ public class BookController {
         bookService.deleteById(id);
         return HttpStatus.NO_CONTENT;
     }
-
-
 
 
 }

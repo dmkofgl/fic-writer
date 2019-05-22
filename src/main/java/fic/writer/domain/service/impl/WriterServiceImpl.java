@@ -1,14 +1,13 @@
 package fic.writer.domain.service.impl;
 
+import fic.writer.domain.audit.SpringSecurityAuditorAware;
 import fic.writer.domain.entity.Book;
 import fic.writer.domain.entity.Profile;
 import fic.writer.domain.entity.dto.BookDto;
 import fic.writer.domain.service.BookService;
 import fic.writer.domain.service.ProfileService;
 import fic.writer.domain.service.WriterService;
-import fic.writer.web.config.security.authorization.EmbeddedProfileDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,17 +16,20 @@ import java.util.Optional;
 public class WriterServiceImpl implements WriterService {
     private BookService bookService;
     private ProfileService profileService;
+    private SpringSecurityAuditorAware auditorAware;
 
     @Autowired
-    public WriterServiceImpl(BookService bookService, ProfileService profileService) {
+    public WriterServiceImpl(BookService bookService, ProfileService profileService, SpringSecurityAuditorAware auditorAware) {
         this.bookService = bookService;
         this.profileService = profileService;
+        this.auditorAware = auditorAware;
     }
 
+
     @Override
-    public Book createBook(BookDto bookDto) {
+    public Book saveBook(BookDto bookDto) {
         Book book = bookService.create(bookDto);
-        Optional<Profile> currentProfile = getCurrentProfile();
+        Optional<Profile> currentProfile = auditorAware.getCurrentAuditor();
         currentProfile.ifPresent(profile -> {
             Profile updatedProfile = profileService.addBookAsAuthor(profile.getId(), book.getId());
             profileService.save(updatedProfile);
@@ -37,26 +39,14 @@ public class WriterServiceImpl implements WriterService {
     }
 
     @Override
-    public void deleteBook(Long bookId) {
-        Optional<Profile> currentProfile = getCurrentProfile();
+    public Book saveBook(Book book) {
+        Book savedBook = bookService.save(book);
+        Optional<Profile> currentProfile = auditorAware.getCurrentAuditor();
         currentProfile.ifPresent(profile -> {
-            profile.getBooksAsAuthor().removeIf(book -> bookId.equals(book.getId()));
-            profile.getBooksAsCoauthor().removeIf(book -> bookId.equals(book.getId()));
-            profileService.save(profile);
+            Profile updatedProfile = profileService.addBookAsAuthor(profile.getId(), savedBook.getId());
+            profileService.save(updatedProfile);
         });
-    }
 
-    private Optional<Profile> getCurrentProfile() {
-        Optional<Profile> user = Optional.empty();
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            user = Optional.ofNullable(
-                    ((EmbeddedProfileDetails)
-                            SecurityContextHolder
-                                    .getContext()
-                                    .getAuthentication()
-                                    .getPrincipal()
-                    ).getProfile());
-        }
-        return user;
+        return savedBook;
     }
 }

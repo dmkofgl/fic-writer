@@ -1,11 +1,11 @@
 package fic.writer.web.controller;
 
 import fic.writer.domain.entity.Book;
+import fic.writer.domain.entity.enums.FileExtension;
 import fic.writer.domain.service.BookService;
 import fic.writer.domain.service.FileService;
-import fic.writer.domain.service.ProfileService;
 import fic.writer.domain.service.WriterService;
-import fic.writer.web.response.BookResponse;
+import fic.writer.web.controller.response.BookResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.hateoas.Resource;
@@ -21,41 +21,43 @@ import java.io.IOException;
 
 @RestController
 public class FileController {
-    private static final String BOOK_DOWNLOAD_TEMPLATE_PATH = "/books/{bookId}/download";
-    private static final String FILE_CONTENT_PARSE_PATH = "/files/content";
-    private static final String PARSE_FILE_AS_BOOK_PATH = "/files/books";
+    private static final String BOOK_DOWNLOAD_TEMPLATE_PATH = "/api/books/{bookId}/download";
+    private static final String FILE_CONTENT_PARSE_PATH = "/api/files/content";
+    private static final String PARSE_FILE_AS_BOOK_PATH = "/api/files/books";
 
     private static final String BOOK_ID_TEMPLATE = "bookId";
-    private static final String FILE_PARAM_NAME = "file";
+    private static final String FILE_NAME_PARAMETER = "file";
 
     private FileService fileService;
     private BookService bookService;
+    private WriterService writerService;
 
     @Autowired
-    public FileController(FileService fileService, BookService bookService, ProfileService profileService, WriterService writerService) {
+    public FileController(FileService fileService, BookService bookService, WriterService writerService) {
         this.fileService = fileService;
         this.bookService = bookService;
+        this.writerService = writerService;
     }
 
     @PostMapping(FILE_CONTENT_PARSE_PATH)
     @ResponseStatus(HttpStatus.CREATED)
-    public Resource<String> takeArticleContentFromFile(@RequestParam(FILE_PARAM_NAME) MultipartFile file) {
+    public Resource<String> takeArticleContentFromFile(@RequestParam(FILE_NAME_PARAMETER) MultipartFile file) {
         return new Resource<>(fileService.parseText(file));
     }
 
     @PostMapping(PARSE_FILE_AS_BOOK_PATH)
     @ResponseStatus(HttpStatus.CREATED)
-    public BookResponse takeBookFromFile(@RequestParam(FILE_PARAM_NAME) MultipartFile file) {
+    public BookResponse parseBookFromFile(@RequestParam(FILE_NAME_PARAMETER) MultipartFile file) {
         Book book = fileService.parseBook(file);
-        bookService.save(book);
+        writerService.saveBook(book);
         return new BookResponse(book);
     }
 
     @GetMapping(BOOK_DOWNLOAD_TEMPLATE_PATH)
-    public ResponseEntity<ByteArrayResource> downloadBook(@PathVariable(BOOK_ID_TEMPLATE) Long id) throws IOException {
+    public ResponseEntity<ByteArrayResource> getBookAsByteArray(@PathVariable(BOOK_ID_TEMPLATE) Long id, FileExtension fileExtension) throws IOException {
         Book book = bookService.findById(id).orElseThrow(EntityNotFoundException::new);
-        final String filenameHeader = "attachment;filename=" + book.getTitle() + ".txt";
-        byte[] bookAsByteArray = bookService.getBookAsByteArray(id);
+        final String filenameHeader = getAttachmentHeader(book.getTitle(), fileExtension);
+        byte[] bookAsByteArray = bookService.convertBookToByteArray(book);
         ByteArrayResource resource = new ByteArrayResource(bookAsByteArray);
         MediaType mediaType = MediaType.TEXT_PLAIN;
         return ResponseEntity.ok()
@@ -63,5 +65,10 @@ public class FileController {
                 .contentType(mediaType)
                 .contentLength(bookAsByteArray.length)
                 .body(resource);
+    }
+
+    private String getAttachmentHeader(String title, FileExtension fileExtension) {
+        String extensionNameInLowerCase = fileExtension.name().toLowerCase();
+        return "attachment;filename=" + title + "." + extensionNameInLowerCase;
     }
 }

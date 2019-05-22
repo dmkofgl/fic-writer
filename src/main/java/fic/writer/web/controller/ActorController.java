@@ -3,7 +3,7 @@ package fic.writer.web.controller;
 import fic.writer.domain.entity.Actor;
 import fic.writer.domain.entity.dto.ActorDto;
 import fic.writer.domain.service.ActorService;
-import fic.writer.web.response.ActorResponse;
+import fic.writer.web.controller.response.ActorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

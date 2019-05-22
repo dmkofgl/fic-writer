@@ -1,9 +1,0 @@
-github:
-  client:
-    clientId: 98ec518608b7facf2a4b
-    clientSecret: a0f0d1c9bf39eeb3600baa6f34c5a4ef317e901e
-    accessTokenUri: https://github.com/login/oauth/access_token
-    userAuthorizationUri: https://github.com/login/oauth/authorize
-    clientAuthenticationScheme: form
-  resource:
-    userInfoUri: https://api.github.com/getLoggedProfile

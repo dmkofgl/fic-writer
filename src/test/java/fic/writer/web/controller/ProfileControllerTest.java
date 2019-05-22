@@ -5,17 +5,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fic.writer.domain.entity.Profile;
 import fic.writer.domain.entity.dto.ProfileDto;
 import fic.writer.domain.service.ProfileService;
+import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -27,12 +29,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = UserController.class, secure = false)
+@WebMvcTest(value = ProfileController.class, secure = false)
 public class ProfileControllerTest {
-    private static final String USERS_PATH = "/users";
+    private static final String USERS_PATH = "/api/users";
     private static final String USER_ID_PATH_TEMPLATE = USERS_PATH + "/{id}";
     @Autowired
-    private UserController userController;
+    private ProfileController profileController;
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -42,36 +44,36 @@ public class ProfileControllerTest {
     @Test
     public void getUsers_whenDtoIsEmpty_shouldReturnOk() throws Exception {
         final long ID = 1L;
-        final String USERNAME = "testUsername";
+        final String username = "testUsername";
 
-        List<Profile> profileList = new ArrayList<>();
+        List<Profile> profileList = Lists.list();
         Profile profile = Profile.builder()
                 .id(ID)
-                .username(USERNAME)
+                .username(username)
                 .build();
         profileList.add(profile);
-        Mockito.when(profileService.findAll()).thenReturn(profileList);
+        Mockito.when(profileService.findPage(any(Pageable.class))).thenReturn(new PageImpl<>(profileList));
 
         mockMvc.perform(get(USERS_PATH))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].username").value(profile.getUsername()))
-                .andExpect(jsonPath("$.[0].links.[0].rel").value("self"));
+                .andExpect(jsonPath("$._embedded.profileResponseList.[0].username").value(profile.getUsername()))
+                .andExpect(jsonPath("$._embedded.profileResponseList.[0]._links.self").hasJsonPath());
     }
 
     @Test
     public void getUserById_whenUserExists_shouldReturnOk() throws Exception {
         final long ID = 1L;
-        final String USERNAME = "testUsername";
+        final String username = "testUsername";
         Profile profile = Profile.builder()
                 .id(ID)
-                .username(USERNAME)
+                .username(username)
                 .build();
 
         Mockito.when(profileService.findById(1L)).thenReturn(Optional.of(profile));
 
         mockMvc.perform(get(USER_ID_PATH_TEMPLATE, ID))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value(profile.getUsername()))
+                .andExpect(jsonPath("$.username").value(username))
                 .andExpect(jsonPath("$._links.self").hasJsonPath());
     }
 
@@ -81,7 +83,11 @@ public class ProfileControllerTest {
         final String username = "testUsername",
                 about = "about",
                 information = "inform";
-        ProfileDto dto = new ProfileDto(username, about, information);
+        ProfileDto profileDto = ProfileDto.builder()
+                .username(username)
+                .about(about)
+                .information(information)
+                .build();
         ObjectMapper mapper = new ObjectMapper();
 
         Profile profile = Profile.builder()
@@ -92,7 +98,7 @@ public class ProfileControllerTest {
                 .build();
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        String body = mapper.writeValueAsString(dto);
+        String body = mapper.writeValueAsString(profileDto);
         Mockito.when(profileService.create(any(ProfileDto.class))).thenReturn(profile);
 
         mockMvc.perform(post(USERS_PATH)
@@ -113,7 +119,9 @@ public class ProfileControllerTest {
                 .booksAsAuthor(new HashSet<>())
                 .booksAsCoauthor(new HashSet<>())
                 .build();
-        ProfileDto dto = new ProfileDto(NEW_USERNAME, null, null);
+        ProfileDto dto = ProfileDto.builder()
+                .username(NEW_USERNAME)
+                .build();
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String body = mapper.writeValueAsString(dto);

@@ -12,12 +12,14 @@ public class ProfileDto {
     private String username;
     private String about;
     private String information;
+    private String email;
 
     public static ProfileDto of(Profile profile) {
         return builder()
                 .username(profile.getUsername())
                 .about(profile.getAbout())
                 .information(profile.getInformation())
+                .email(profile.getEmail())
                 .build();
     }
 }
