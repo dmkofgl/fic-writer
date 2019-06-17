@@ -5,6 +5,8 @@ import fic.writer.domain.entity.enums.Size;
 import fic.writer.domain.entity.enums.State;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+
 
 @Builder
 @Getter
@@ -12,6 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookDto {
+    @NotBlank
     private String title;
     private String description;
     private Size size;

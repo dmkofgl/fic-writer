@@ -2,10 +2,8 @@ package fic.writer.domain.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
@@ -17,6 +15,8 @@ import java.util.Set;
 public class Genre {
     @Id
     private Long id;
+    @NotBlank
+    @Column(unique = true)
     private String name;
     @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY)
     private Set<Book> book;

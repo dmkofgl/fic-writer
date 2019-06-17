@@ -33,7 +33,7 @@ public class BookServiceTest {
     public void createBook_shouldChangeCount() {
         final long profileId = 1L;
         final int SIZE_BEFORE = bookService.findAll().size();
-        Book emptyBook = Book.builder().build();
+        Book emptyBook = Book.builder().title("title").build();
         setUserInSecurityContext(profileId);
         bookService.create(BookDto.of(emptyBook));
 

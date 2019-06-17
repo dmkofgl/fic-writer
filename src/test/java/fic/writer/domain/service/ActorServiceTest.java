@@ -23,7 +23,7 @@ public class ActorServiceTest {
 
     @Test
     public void createActor_whenCorrect_shouldFindWithId() {
-        Actor actor = Actor.builder().build();
+        Actor actor = Actor.builder().name("name").build();
         actor = actorService.create(ActorDto.of(actor));
 
         assertTrue(actorService.findById(actor.getId()).isPresent());

@@ -25,7 +25,7 @@ public class BookAndArticleServicesTest {
     @Test
     public void createArticle_shouldFindByGeneratedId() {
         final Long BOOK_ID = 1L;
-        Article article = Article.builder().build();
+        Article article = Article.builder().title("title").content("content").build();
         bookService.addArticle(BOOK_ID, ArticleDto.of(article));
 
         Book book = bookService.findById(BOOK_ID).get();
@@ -35,7 +35,7 @@ public class BookAndArticleServicesTest {
     @Test
     public void createArticle_shouldGenerateCreatedDate() {
         final Long BOOK_ID = 1L;
-        Article article = Article.builder().build();
+        Article article = Article.builder().title("title").content("content").build();
         bookService.addArticle(BOOK_ID, ArticleDto.of(article));
 
         Book book = bookService.findById(BOOK_ID).get();

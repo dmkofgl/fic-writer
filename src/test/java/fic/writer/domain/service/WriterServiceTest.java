@@ -45,7 +45,7 @@ public class WriterServiceTest {
     @Transactional
     public void createBook_whenProfileExistInSecurityContext_shouldAddBookInAuthorCollection() {
         final Long PROFILE_ID = 1L;
-        BookDto bookDto = BookDto.builder().build();
+        BookDto bookDto = BookDto.builder().title("title").build();
         setUserInSecurityContext(PROFILE_ID);
 
         Book book = writerService.saveBook(bookDto);

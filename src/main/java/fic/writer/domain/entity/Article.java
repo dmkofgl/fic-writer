@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
@@ -21,12 +22,14 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
     private String title;
     @CreatedDate
     private Date created;
     @LastModifiedDate
     private Date lastModify;
     @Column(columnDefinition = "TEXT")
+    @NotBlank
     private String content;
     private String annotation;
     @ManyToOne(fetch = FetchType.LAZY)
