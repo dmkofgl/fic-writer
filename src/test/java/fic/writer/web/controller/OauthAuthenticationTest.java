@@ -30,7 +30,7 @@ public class OauthAuthenticationTest {
     private final String OAUTH_SIGNUP_URL = "/auth/signup";
 
     @Autowired
-    private WebApplicationContext wac;
+    private WebApplicationContext webApplicationContext;
 
     @Autowired
     private FilterChainProxy springSecurityFilterChain;
@@ -39,7 +39,7 @@ public class OauthAuthenticationTest {
 
     @Before
     public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac)
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext)
                 .addFilter(springSecurityFilterChain).build();
     }
 
