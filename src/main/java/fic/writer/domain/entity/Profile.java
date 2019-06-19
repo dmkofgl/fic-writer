@@ -23,7 +23,7 @@ public class Profile {
     @Length(min = 2, max = 255)
     private String username;
     @Length(min = 5, max = 255)
-    @Email
+    @Email(regexp = "[A-Za-z0-9._%-+]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}")
     private String email;
     private String imageUrl;
     private String about;
