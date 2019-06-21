@@ -1,4 +1,4 @@
-package fic.writer.web.exception.handler;
+package fic.writer.web.controller.response;
 
 import lombok.Getter;
 import org.springframework.hateoas.ResourceSupport;
@@ -15,6 +15,5 @@ public class ConstraintViolationExceptionResponse extends ResourceSupport {
         field = constraintViolation.getPropertyPath().toString();
         message = constraintViolation.getMessage();
         value = constraintViolation.getInvalidValue();
-
     }
 }

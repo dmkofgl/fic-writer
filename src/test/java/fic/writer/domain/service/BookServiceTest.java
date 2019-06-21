@@ -10,12 +10,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -89,8 +89,8 @@ public class BookServiceTest {
         assertNotNull(bookService.findById(DELETE_BOOK_ID));
     }
 
-    @Test(expected = EmptyResultDataAccessException.class)
-    public void deletedBook_whenNotExist_shouldThorwException() {
+    @Test(expected = NoSuchElementException.class)
+    public void deletedBook_whenNotExist_shouldThorowException() {
         final Long DELETE_BOOK_ID = -1L;
         bookService.deleteById(DELETE_BOOK_ID);
     }

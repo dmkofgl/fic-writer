@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 public class ArticleController {
     private static final String ID_TEMPLATE_PATH = "/{articleId}";
     private static final String ID_TEMPLATE = "articleId";
-    private static final String BOOK_ID_TEMPLATE_PATH = "/{bookId}";
     private static final String BOOK_ID_TEMPLATE = "bookId";
     @Autowired
     private ArticleService articleService;

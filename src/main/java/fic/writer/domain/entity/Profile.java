@@ -15,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Table(name = "profile")
+@EqualsAndHashCode(of = {"id", "email", "username"})
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -60,9 +60,9 @@ public class BookController {
     }
 
     @DeleteMapping(ID_TEMPLATE_PATH)
-    public HttpStatus deleteBook(Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBook(@PathVariable(ID_TEMPLATE) Long id) {
         bookService.deleteById(id);
-        return HttpStatus.NO_CONTENT;
     }
 
 
