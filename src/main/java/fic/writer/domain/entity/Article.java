@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -36,5 +37,8 @@ public class Article {
     private Book book;
     @Formula("ceil( CHAR_LENGTH(content)/" + CHARS_IN_PAGE + ")")
     private long pageCount;
+    @Singular("formatters")
+    @ManyToOne(fetch = FetchType.LAZY)
+    Set<Formatting> formattings;
 
 }

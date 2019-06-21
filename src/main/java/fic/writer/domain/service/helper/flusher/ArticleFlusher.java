@@ -14,5 +14,8 @@ public class ArticleFlusher {
         if (articleDto.getContent() != null) {
             article.setContent(articleDto.getContent());
         }
+        if (articleDto.getFormattings() != null) {
+            article.setFormattings(articleDto.getFormattings());
+        }
     }
 }
