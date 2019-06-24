@@ -3,7 +3,7 @@ package fic.writer.domain.service.helper.formatter;
 import fic.writer.exception.FormatterNotFoundException;
 
 public class FormatterFactory {
-    public static Formatter getFormatter(FormattingKind kind) {
+    public static Formatter getFormatter(FormatExtension kind) {
         Formatter formatter;
         switch (kind) {
             case MARKDOWN: {

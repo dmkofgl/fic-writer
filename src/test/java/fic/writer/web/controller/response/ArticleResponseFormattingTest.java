@@ -4,7 +4,7 @@ import fic.writer.domain.entity.Article;
 import fic.writer.domain.entity.Book;
 import fic.writer.domain.entity.Formatting;
 import fic.writer.domain.entity.enums.FormattingType;
-import fic.writer.domain.service.helper.formatter.FormattingKind;
+import fic.writer.domain.service.helper.formatter.FormatExtension;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 
@@ -18,8 +18,8 @@ public class ArticleResponseFormattingTest {
         String content = "article";
         Book book = Book.builder().id(1L).build();
         Article article = Article.builder().id(1L).content(content).book(book).build();
-        FormattingKind formattingKind = FormattingKind.MARKDOWN;
-        ArticleResponse articleResponse = new ArticleResponse(article, formattingKind);
+        FormatExtension formatExtension = FormatExtension.MARKDOWN;
+        ArticleResponse articleResponse = new ArticleResponse(article, formatExtension);
         assertEquals(content, articleResponse.getContent());
     }
 
@@ -38,8 +38,8 @@ public class ArticleResponseFormattingTest {
                 .book(book)
                 .formatters(formatting)
                 .build();
-        FormattingKind formattingKind = FormattingKind.MARKDOWN;
-        ArticleResponse articleResponse = new ArticleResponse(article, formattingKind);
+        FormatExtension formatExtension = FormatExtension.MARKDOWN;
+        ArticleResponse articleResponse = new ArticleResponse(article, formatExtension);
         assertEquals(newContext, articleResponse.getContent());
     }
 
@@ -64,8 +64,8 @@ public class ArticleResponseFormattingTest {
                 .book(book)
                 .formattings(formattings)
                 .build();
-        FormattingKind formattingKind = FormattingKind.MARKDOWN;
-        ArticleResponse articleResponse = new ArticleResponse(article, formattingKind);
+        FormatExtension formatExtension = FormatExtension.MARKDOWN;
+        ArticleResponse articleResponse = new ArticleResponse(article, formatExtension);
         assertEquals(newContext, articleResponse.getContent());
     }
 
@@ -90,8 +90,8 @@ public class ArticleResponseFormattingTest {
                 .book(book)
                 .formattings(formattings)
                 .build();
-        FormattingKind formattingKind = FormattingKind.MARKDOWN;
-        ArticleResponse articleResponse = new ArticleResponse(article, formattingKind);
+        FormatExtension formatExtension = FormatExtension.MARKDOWN;
+        ArticleResponse articleResponse = new ArticleResponse(article, formatExtension);
         assertEquals(newContext, articleResponse.getContent());
     }
 
@@ -100,8 +100,8 @@ public class ArticleResponseFormattingTest {
         String content = "article";
         Book book = Book.builder().id(1L).build();
         Article article = Article.builder().id(1L).content(content).book(book).build();
-        FormattingKind formattingKind = FormattingKind.HTML;
-        ArticleResponse articleResponse = new ArticleResponse(article, formattingKind);
+        FormatExtension formatExtension = FormatExtension.HTML;
+        ArticleResponse articleResponse = new ArticleResponse(article, formatExtension);
         assertEquals(content, articleResponse.getContent());
     }
 
@@ -110,8 +110,8 @@ public class ArticleResponseFormattingTest {
         String content = "article";
         Book book = Book.builder().id(1L).build();
         Article article = Article.builder().id(1L).content(content).book(book).build();
-        FormattingKind formattingKind = FormattingKind.PLURAL;
-        ArticleResponse articleResponse = new ArticleResponse(article, formattingKind);
+        FormatExtension formatExtension = FormatExtension.PLURAL;
+        ArticleResponse articleResponse = new ArticleResponse(article, formatExtension);
         assertEquals(content, articleResponse.getContent());
     }
 
@@ -135,8 +135,8 @@ public class ArticleResponseFormattingTest {
                 .book(book)
                 .formattings(formattings)
                 .build();
-        FormattingKind formattingKind = FormattingKind.PLURAL;
-        ArticleResponse articleResponse = new ArticleResponse(article, formattingKind);
+        FormatExtension formatExtension = FormatExtension.PLURAL;
+        ArticleResponse articleResponse = new ArticleResponse(article, formatExtension);
         assertEquals(content, articleResponse.getContent());
     }
 
@@ -145,8 +145,8 @@ public class ArticleResponseFormattingTest {
         String content = "article";
         Book book = Book.builder().id(1L).build();
         Article article = Article.builder().id(1L).content(content).book(book).build();
-        FormattingKind formattingKind = FormattingKind.XML;
-        ArticleResponse articleResponse = new ArticleResponse(article, formattingKind);
+        FormatExtension formatExtension = FormatExtension.XML;
+        ArticleResponse articleResponse = new ArticleResponse(article, formatExtension);
         assertEquals(content, articleResponse.getContent());
     }
 

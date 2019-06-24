@@ -4,7 +4,7 @@ import fic.writer.domain.entity.Article;
 import fic.writer.domain.entity.dto.ArticleDto;
 import fic.writer.domain.service.ArticleService;
 import fic.writer.domain.service.BookService;
-import fic.writer.domain.service.helper.formatter.FormattingKind;
+import fic.writer.domain.service.helper.formatter.FormatExtension;
 import fic.writer.web.controller.response.ArticleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,21 +29,21 @@ public class ArticleController {
 
     @GetMapping
     public List<ArticleResponse> getAllArticles(@PathVariable(BOOK_ID_TEMPLATE) Long bookId) {
-        FormattingKind formattingKind = FormattingKind.MARKDOWN;
+        FormatExtension formatExtension = FormatExtension.MARKDOWN;
         List<ArticleResponse> list = bookService.findById(bookId).get()
                 .getArticles().stream()
                 .sorted(Comparator.comparingLong(Article::getId))
-                .map(article -> new ArticleResponse(article, formattingKind))
+                .map(article -> new ArticleResponse(article, formatExtension))
                 .collect(Collectors.toList());
         return list;
     }
 
     @GetMapping(ID_TEMPLATE_PATH)
     public ArticleResponse getOneArticle(@PathVariable(BOOK_ID_TEMPLATE) Long bookId, @PathVariable(ID_TEMPLATE) Long articleId) {
-        FormattingKind formattingKind = FormattingKind.MARKDOWN;
+        FormatExtension formatExtension = FormatExtension.MARKDOWN;
         return bookService.findById(bookId).get().getArticles().stream().
                 filter(article -> article.getId().equals(articleId))
-                .map(article -> new ArticleResponse(article, formattingKind))
+                .map(article -> new ArticleResponse(article, formatExtension))
                 .findFirst()
                 .orElseThrow(EntityNotFoundException::new);
     }

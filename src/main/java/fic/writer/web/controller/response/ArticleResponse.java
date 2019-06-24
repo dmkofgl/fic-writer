@@ -2,7 +2,7 @@ package fic.writer.web.controller.response;
 
 import fic.writer.domain.entity.Article;
 import fic.writer.domain.service.helper.formatter.ArticleFormatter;
-import fic.writer.domain.service.helper.formatter.FormattingKind;
+import fic.writer.domain.service.helper.formatter.FormatExtension;
 import fic.writer.web.controller.ArticleController;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,18 +25,18 @@ public class ArticleResponse extends ResourceSupport {
     private String annotation;
     private Long pageCount;
 
-    public ArticleResponse(Article article, FormattingKind formattingKind) {
+    public ArticleResponse(Article article, FormatExtension formatExtension) {
         articleId = article.getId();
         title = article.getTitle();
         created = article.getCreated();
         annotation = article.getAnnotation();
         pageCount = article.getPageCount();
-        formattingContent(article, formattingKind);
+        formattingContent(article, formatExtension);
         addSelfLink(article.getBook().getId(), articleId);
     }
 
-    private void formattingContent(Article article, FormattingKind formattingKind) {
-        ArticleFormatter formatter = new ArticleFormatter(formattingKind);
+    private void formattingContent(Article article, FormatExtension formatExtension) {
+        ArticleFormatter formatter = new ArticleFormatter(formatExtension);
         String source = article.getContent();
 
         source = formatter.applyFormatting(source, article.getFormattings());

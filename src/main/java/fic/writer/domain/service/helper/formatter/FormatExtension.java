@@ -1,5 +1,5 @@
 package fic.writer.domain.service.helper.formatter;
 
-public enum FormattingKind {
+public enum FormatExtension {
     MARKDOWN, XML, PLURAL, HTML
 }
