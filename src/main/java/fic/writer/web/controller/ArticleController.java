@@ -39,10 +39,10 @@ public class ArticleController {
     }
 
     @GetMapping(ID_TEMPLATE_PATH)
-    public ArticleResponse getOneArticle(@PathVariable(BOOK_ID_TEMPLATE) Long bookId, @PathVariable(ID_TEMPLATE) Long articleId) {
+    public ArticleResponse getOneArticle(@PathVariable(BOOK_ID_TEMPLATE) Long bookId, @PathVariable(ID_TEMPLATE) Long articleSequenceNumber) {
         FormatExtension formatExtension = FormatExtension.MARKDOWN;
         return bookService.findById(bookId).get().getArticles().stream().
-                filter(article -> article.getId().equals(articleId))
+                filter(article -> article.getSequenceNumber().equals(articleSequenceNumber))
                 .map(article -> new ArticleResponse(article, formatExtension))
                 .findFirst()
                 .orElseThrow(EntityNotFoundException::new);

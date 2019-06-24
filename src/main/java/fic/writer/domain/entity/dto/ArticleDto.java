@@ -18,7 +18,8 @@ public class ArticleDto {
     @NotBlank
     private String content;
     private String annotation;
-    Set<Formatting> formattings;
+    private Set<Formatting> formattings;
+    private Long sequenceNumber;
 
 
     public static ArticleDto of(Article article) {
@@ -27,6 +28,7 @@ public class ArticleDto {
                 .content(article.getContent())
                 .annotation(article.getAnnotation())
                 .formattings(article.getFormattings())
+                .sequenceNumber(article.getSequenceNumber())
                 .build();
     }
 }

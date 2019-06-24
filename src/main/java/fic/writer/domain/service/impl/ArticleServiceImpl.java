@@ -8,7 +8,7 @@ import fic.writer.domain.service.helper.flusher.ArticleFlusher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +29,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article update(Long id, ArticleDto articleDto) {
-        Article article = articleRepository.findById(id).orElseThrow(EntityExistsException::new);
+        Article article = articleRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         ArticleFlusher.flushArticleDtoToArticle(article, articleDto);
         return articleRepository.save(article);
     }

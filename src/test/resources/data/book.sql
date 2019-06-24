@@ -7,7 +7,6 @@ INSERT INTO book(id,title,author_id)VALUES(333,'delete book',1);
 INSERT INTO book(id,title,author_id)VALUES(334,'Книга для удаления',1);
 
 INSERT INTO book(id,title,description, size, state,author_id)VALUES(335,'Arabella','Artic monkeys', 1,2,3);
-INSERT INTO user_books_as_author (user_id,books_as_author_id)VALUES(3,335);
 INSERT INTO book_subauthors (user_id,book_id)VALUES(4,335);
 
 
