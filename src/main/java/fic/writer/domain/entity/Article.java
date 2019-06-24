@@ -38,7 +38,7 @@ public class Article {
     @Formula("ceil( CHAR_LENGTH(content)/" + CHARS_IN_PAGE + ")")
     private long pageCount;
     @Singular("formatters")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     Set<Formatting> formattings;
 
 }

@@ -1,7 +1,9 @@
 package fic.writer.web.controller.response;
 
 import fic.writer.domain.entity.Article;
-import fic.writer.web.controller.BookController;
+import fic.writer.domain.service.helper.formatter.ArticleFormatter;
+import fic.writer.domain.service.helper.formatter.FormattingKind;
+import fic.writer.web.controller.ArticleController;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,17 +25,26 @@ public class ArticleResponse extends ResourceSupport {
     private String annotation;
     private Long pageCount;
 
-    public ArticleResponse(Article article) {
+    public ArticleResponse(Article article, FormattingKind formattingKind) {
         articleId = article.getId();
         title = article.getTitle();
         created = article.getCreated();
-        content = article.getContent();
         annotation = article.getAnnotation();
         pageCount = article.getPageCount();
-        addSelfLink(articleId);
+        formattingContent(article, formattingKind);
+        addSelfLink(article.getBook().getId(), articleId);
     }
 
-    private void addSelfLink(Long id) {
-        add(linkTo(methodOn(BookController.class, id).getBookById(id)).withSelfRel());
+    private void formattingContent(Article article, FormattingKind formattingKind) {
+        ArticleFormatter formatter = new ArticleFormatter(formattingKind);
+        String source = article.getContent();
+
+        source = formatter.applyFormatting(source, article.getFormattings());
+
+        content = source;
+    }
+
+    private void addSelfLink(Long bookId, Long articleId) {
+        add(linkTo(methodOn(ArticleController.class, bookId, articleId).getOneArticle(bookId, articleId)).withSelfRel());
     }
 }

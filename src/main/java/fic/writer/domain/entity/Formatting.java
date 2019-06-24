@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 public class Formatting {
     @Id
     private Long id;
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Article article;
     @NotNull
     private Long startIndex;
