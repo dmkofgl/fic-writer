@@ -53,13 +53,13 @@ public class FileController {
         return new BookResponse(book);
     }
 
-    @GetMapping(BOOK_DOWNLOAD_TEMPLATE_PATH)
-    public ResponseEntity<ByteArrayResource> getBookAsByteArray(@PathVariable(BOOK_ID_TEMPLATE) Long id, FileExtension fileExtension) throws IOException {
+    @GetMapping(BOOK_DOWNLOAD_TEMPLATE_PATH + "/{extension}")
+    public ResponseEntity<ByteArrayResource> getBookAsByteArray(@PathVariable(BOOK_ID_TEMPLATE) Long id, @PathVariable("extension") FileExtension fileExtension) throws IOException {
         Book book = bookService.findById(id).orElseThrow(EntityNotFoundException::new);
         final String filenameHeader = getAttachmentHeader(book.getTitle(), fileExtension);
-        byte[] bookAsByteArray = bookService.convertBookToByteArray(book);
+        byte[] bookAsByteArray = bookService.convertBookToByteArray(book, fileExtension);
         ByteArrayResource resource = new ByteArrayResource(bookAsByteArray);
-        MediaType mediaType = MediaType.TEXT_PLAIN;
+        MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, filenameHeader)
                 .contentType(mediaType)

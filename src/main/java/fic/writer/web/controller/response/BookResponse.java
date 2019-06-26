@@ -58,17 +58,21 @@ public class BookResponse extends ResourceSupport {
         actors = book.getActors().stream().map(ActorResponse::new).map(ResourceSupport::getId).collect(Collectors.toSet());
         articles = linkTo(methodOn(ArticleController.class, bookId).getAllArticles(bookId)).withRel("articles");
         addSelfLink(bookId);
-        addDownloadLink((bookId));
+
+        addDownloadLink(bookId, FileExtension.TXT);
+        addDownloadLink(bookId, FileExtension.FB2);
+
+
     }
 
     private void addSelfLink(Long id) {
         add(linkTo(methodOn(BookController.class, id).getBookById(id)).withSelfRel());
     }
 
-    private void addDownloadLink(Long id) {
-
+    private void addDownloadLink(Long id, FileExtension extension) {
         try {
-            add(linkTo(methodOn(FileController.class, id).getBookAsByteArray(id, FileExtension.TXT)).withRel("download"));
+            add(linkTo(methodOn(FileController.class, id).getBookAsByteArray(id, extension))
+                    .withRel("download_" + extension.toString().toLowerCase()));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -6,21 +6,21 @@ import fic.writer.domain.entity.Profile;
 
 import java.util.Set;
 
-public class BookTXTStringConstructor extends BookStringConstructor {
-    protected BookStringBuilder bookStringBuilder = new BookStringBuilder();
+public class BookTXTFileConstructor extends BookFileConstructor {
+
+    private BookStringBuilder bookStringBuilder = new BookStringBuilder();
 
     @Override
     protected void writeTitle(Book book) {
         String titleHeader = "Title";
         bookStringBuilder.addDescription(titleHeader, book.getTitle());
-        content = bookStringBuilder.getContent();
     }
 
     @Override
     protected void writeDescription(Book book) {
         String descriptionHeader = "Description";
         bookStringBuilder.addDescription(descriptionHeader, book.getDescription());
-        content = bookStringBuilder.getContent();
+
     }
 
     @Override
@@ -28,7 +28,6 @@ public class BookTXTStringConstructor extends BookStringConstructor {
         if (book.getAuthor() != null) {
             String authorHeader = "Author";
             bookStringBuilder.addDescription(authorHeader, book.getAuthor().getUsername());
-            content = bookStringBuilder.getContent();
         }
     }
 
@@ -42,7 +41,6 @@ public class BookTXTStringConstructor extends BookStringConstructor {
                 .orElse("");
         String coauthorsHeader = "Coauthor";
         bookStringBuilder.addDescription(coauthorsHeader, coauthors);
-        content = bookStringBuilder.getContent();
     }
 
     @Override
@@ -51,7 +49,6 @@ public class BookTXTStringConstructor extends BookStringConstructor {
             String sizeHeader = "Size";
             bookStringBuilder.addDescription(sizeHeader, book.getSize().name());
         }
-        content = bookStringBuilder.getContent();
     }
 
     @Override
@@ -60,7 +57,6 @@ public class BookTXTStringConstructor extends BookStringConstructor {
             String stateHeader = "State";
             bookStringBuilder.addDescription(stateHeader, book.getState().name());
         }
-        content = bookStringBuilder.getContent();
     }
 
     @Override
@@ -74,7 +70,6 @@ public class BookTXTStringConstructor extends BookStringConstructor {
             String contentRow = articleCounter + ")" + article.getTitle();
             bookStringBuilder.addParagraph(contentRow);
         }
-        content = bookStringBuilder.getContent();
     }
 
     @Override
@@ -86,8 +81,13 @@ public class BookTXTStringConstructor extends BookStringConstructor {
             bookStringBuilder.addDescription(annotationHeader, article.getAnnotation());
             bookStringBuilder.addParagraph(article.getContent());
         }
-        content = bookStringBuilder.getContent();
     }
 
+    @Override
+    public byte[] convertToByteArray(Book book) {
+        super.buildBook(book);
+        String content = bookStringBuilder.getContent();
+        return content.getBytes();
 
+    }
 }

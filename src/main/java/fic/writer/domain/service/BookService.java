@@ -3,6 +3,7 @@ package fic.writer.domain.service;
 import fic.writer.domain.entity.Book;
 import fic.writer.domain.entity.dto.ArticleDto;
 import fic.writer.domain.entity.dto.BookDto;
+import fic.writer.domain.entity.enums.FileExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -31,7 +32,5 @@ public interface BookService {
 
     void deleteById(Long bookId);
 
-    byte[] getBookAsByteArray(Long bookId);
-
-    byte[] convertBookToByteArray(Book book);
+    byte[] convertBookToByteArray(Book book, FileExtension fileExtension);
 }

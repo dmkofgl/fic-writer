@@ -4,10 +4,11 @@ import fic.writer.domain.entity.Article;
 import fic.writer.domain.entity.Book;
 import fic.writer.domain.entity.dto.ArticleDto;
 import fic.writer.domain.entity.dto.BookDto;
+import fic.writer.domain.entity.enums.FileExtension;
 import fic.writer.domain.repository.BookRepository;
 import fic.writer.domain.service.BookService;
-import fic.writer.domain.service.helper.BookStringConstructor;
-import fic.writer.domain.service.helper.BookTXTStringConstructor;
+import fic.writer.domain.service.helper.BookConverter;
+import fic.writer.domain.service.helper.BookFormatConverterFactory;
 import fic.writer.domain.service.helper.flusher.ArticleFlusher;
 import fic.writer.domain.service.helper.flusher.BookFlusher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityListeners;
-import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -98,15 +98,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public byte[] getBookAsByteArray(Long bookId) {
-        Book book = bookRepository.findById(bookId).orElseThrow(EntityNotFoundException::new);
-        return convertBookToByteArray(book);
-    }
-
-    @Override
-    public byte[] convertBookToByteArray(Book book) {
-        BookStringConstructor bookStringConstructor = new BookTXTStringConstructor();
-        String bookAsString = bookStringConstructor.convertBookToText(book);
-        return bookAsString.getBytes();
+    public byte[] convertBookToByteArray(Book book, FileExtension fileExtension) {
+        BookConverter bookConverter = BookFormatConverterFactory.getBookConverter(fileExtension);
+        return bookConverter.convertToByteArray(book);
     }
 }

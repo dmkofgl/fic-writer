@@ -12,7 +12,7 @@ public class BookTXTStringConstructorTest {
 
     @Test
     public void convertBookToTXT() {
-        BookStringConstructor bookStringConstructor = new BookTXTStringConstructor();
+        BookFileConstructor bookFileConstructor = new BookTXTFileConstructor();
         String description = "it's a book",
                 title = "Header";
 
@@ -25,8 +25,7 @@ public class BookTXTStringConstructorTest {
                         Article.builder().content("art content1").title("art1").build(),
                         Article.builder().content("art content2").title("art2").build()))
                 .build();
-
-        String convertedBook = bookStringConstructor.convertBookToText(book);
+        String convertedBook = new String(bookFileConstructor.convertToByteArray(book));
 
         assertTrue(convertedBook.contains(description));
         assertTrue(convertedBook.contains(title));

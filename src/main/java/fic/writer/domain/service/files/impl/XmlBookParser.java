@@ -76,12 +76,12 @@ public class XmlBookParser implements BookParser {
 
     @Override
     public Set<Profile> getCoauthors() {
-        throw new UnsupportedOperationException("fb2 doesn't contain this field");
+        return null;
     }
 
     @Override
     public State getState() {
-        throw new UnsupportedOperationException("fb2 doesn't contain this field");
+        return null;
     }
 
     @Override
@@ -123,7 +123,6 @@ public class XmlBookParser implements BookParser {
                     .build();
             articles.add(article);
         }
-
         return articles;
     }
 

@@ -2,10 +2,8 @@ package fic.writer.domain.service.helper;
 
 import fic.writer.domain.entity.Book;
 
-public abstract class BookStringConstructor {
-    protected String content;
-
-    public final String convertBookToText(Book book) {
+public abstract class BookFileConstructor implements BookConverter {
+    protected final void buildBook(Book book) {
         writeTitle(book);
         writeDescription(book);
         writeAuthor(book);
@@ -14,7 +12,6 @@ public abstract class BookStringConstructor {
         writeState(book);
         writeArticleHeaders(book);
         writeArticlesContent(book);
-        return content;
     }
 
     protected abstract void writeTitle(Book book);
