@@ -32,7 +32,7 @@ public class ArticleController {
         FormatExtension formatExtension = FormatExtension.MARKDOWN;
         List<ArticleResponse> list = bookService.findById(bookId).get()
                 .getArticles().stream()
-                .sorted(Comparator.comparingLong(Article::getId))
+                .sorted(Comparator.comparingLong(Article::getSequenceNumber))
                 .map(article -> new ArticleResponse(article, formatExtension))
                 .collect(Collectors.toList());
         return list;

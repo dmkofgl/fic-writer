@@ -40,6 +40,7 @@ public class WriterServiceImpl implements WriterService {
 
     @Override
     public Book saveBook(Book book) {
+        book.getArticles().forEach(a -> a.setBook(book));
         Book savedBook = bookService.save(book);
         Optional<Profile> currentProfile = auditorAware.getCurrentAuditor();
         currentProfile.ifPresent(profile -> {

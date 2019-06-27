@@ -120,6 +120,7 @@ public class XmlBookParser implements BookParser {
                     .title(title)
                     .annotation(annotation)
                     .content(content.toString())
+                    .sequenceNumber(Integer.toUnsignedLong(i + 1))
                     .build();
             articles.add(article);
         }

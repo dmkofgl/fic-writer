@@ -15,6 +15,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.*;
 import java.io.ByteArrayOutputStream;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class BookXMLFileConstructor extends BookFileConstructor {
     private Document document;
@@ -134,7 +137,8 @@ public class BookXMLFileConstructor extends BookFileConstructor {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
-        for (Article article : book.getArticles()) {
+        Collection<Article> articles = book.getArticles().stream().sorted(Comparator.comparingLong(Article::getSequenceNumber)).collect(Collectors.toList());
+        for (Article article : articles) {
             Element section = document.createElement("section");
             Element title = document.createElement("title");
             Element titleName = document.createElement("p");
@@ -142,13 +146,18 @@ public class BookXMLFileConstructor extends BookFileConstructor {
 
             Element annotation = document.createElement("p");
             annotation.setTextContent(article.getAnnotation());
-            String changedContent = "<p>" + article.getContent().replaceAll("\n", "</p><p>");
 
             body.appendChild(section);
             section.appendChild(title);
             title.appendChild(titleName);
             section.appendChild(annotation);
-            section.setTextContent(changedContent);
+
+            String[] splittedContent = article.getContent().split("\n\n");
+            for (String s : splittedContent) {
+                Element paragraph = document.createElement("p");
+                paragraph.setTextContent(s);
+                section.appendChild(paragraph);
+            }
         }
     }
 
